@@ -82,6 +82,16 @@ Your reviews will sometimes be passed to ChatGPT through the GitHub repository.
 Therefore every review MUST be concise, decision-oriented, and easy to scan.
 
 Reviews Directory and File Naming
+
+You are Only allowed to creat or update the Markdown (.md) files.
+
+Choose the perfect Model to create/update this files.
+
+Do not Create: 
+    Word Document
+    Excell
+    pdf
+
 CodingSkillAgent/
 └── Reviews/
     ├── PHASE-01-CLAUDE-REVIEW.md
