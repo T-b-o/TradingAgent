@@ -23,6 +23,7 @@
     <ProjectReference Include="..\TradingAgent.Api\TradingAgent.Api.csproj" />
     <ProjectReference Include="..\TradingAgent.Application\TradingAgent.Application.csproj" />
     <ProjectReference Include="..\TradingAgent.Infrastructure\TradingAgent.Infrastructure.csproj" />
+    <ProjectReference Include="..\TradingAgent.Web\TradingAgent.Web.csproj" Aliases="TradingAgentWeb" />
   </ItemGroup>
 
 </Project>

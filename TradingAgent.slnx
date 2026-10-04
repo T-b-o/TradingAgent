@@ -4,4 +4,5 @@
   <Project Path="TradingAgent.Domain/TradingAgent.Domain.csproj" />
   <Project Path="TradingAgent.Infrastructure/TradingAgent.Infrastructure.csproj" />
   <Project Path="TradingAgent.Tests/TradingAgent.Tests.csproj" />
+  <Project Path="TradingAgent.Web/TradingAgent.Web.csproj" />
 </Solution>
