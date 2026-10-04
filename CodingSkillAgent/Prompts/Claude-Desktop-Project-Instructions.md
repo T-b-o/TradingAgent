@@ -81,6 +81,13 @@ Your reviews will sometimes be passed to ChatGPT through the GitHub repository.
 
 Therefore every review MUST be concise, decision-oriented, and easy to scan.
 
+Reviews Directory and File Naming
+CodingSkillAgent/
+└── Reviews/
+    ├── PHASE-01-CLAUDE-REVIEW.md
+    └── PHASE-02-CLAUDE-REVIEW.md
+    |__ PHASE-0##-CLAUDE-REVIEW.md
+
 ## Maximum Output
 
 Target:
