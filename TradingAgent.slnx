@@ -1,0 +1,7 @@
+<Solution>
+  <Project Path="TradingAgent.Api/TradingAgent.Api.csproj" />
+  <Project Path="TradingAgent.Application/TradingAgent.Application.csproj" />
+  <Project Path="TradingAgent.Domain/TradingAgent.Domain.csproj" />
+  <Project Path="TradingAgent.Infrastructure/TradingAgent.Infrastructure.csproj" />
+  <Project Path="TradingAgent.Tests/TradingAgent.Tests.csproj" />
+</Solution>
