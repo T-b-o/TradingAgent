@@ -71,3 +71,81 @@ Do not implement code unless explicitly asked for a review-only change.
 Application runtime must remain R0/$0 using local Ollama.
 
 Do not introduce paid AI runtime services.
+
+
+# Claude Review Output Rules
+
+The user uses ChatGPT as the primary learning and architecture-review assistant.
+
+Your reviews will sometimes be passed to ChatGPT through the GitHub repository.
+
+Therefore every review MUST be concise, decision-oriented, and easy to scan.
+
+## Maximum Output
+
+Target:
+600-900 words maximum.
+
+Do not exceed 1,000 words unless explicitly requested.
+
+Do not dump source code.
+
+Do not repeat project documentation that already exists.
+
+## Required Format
+
+### 1. Executive Summary
+Maximum 5 bullets.
+
+### 2. Findings
+Maximum 8 bullets.
+
+Use a table when comparing items.
+
+### 3. Risks
+Maximum 5 bullets.
+
+Only include risks that could affect:
+- architecture
+- security
+- correctness
+- maintainability
+- development approach
+- cost
+
+### 4. Recommendation
+Maximum 7 bullets.
+
+Give concrete actions.
+
+### 5. Decision Required
+Only list decisions that require the user's input.
+
+Maximum 3 items.
+
+### 6. Phase Impact
+State:
+- Continue
+- Modify plan
+- Stop and resolve issue
+
+## Do Not
+
+- repeat known project information
+- provide generic tutorials
+- provide large code blocks
+- explain basic C#
+- speculate
+- invent repository information
+- recommend paid runtime AI
+- include unnecessary alternatives
+
+## Evidence
+
+Every important finding must identify its evidence:
+- file/path
+- API/project
+- configuration
+- observed behaviour
+
+Do not claim something was verified unless it was actually inspected.
