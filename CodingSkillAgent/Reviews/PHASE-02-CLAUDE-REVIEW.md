@@ -1,73 +1,44 @@
-# Phase 02 — Claude Review
+# Phase 02 — Architecture Decision: Web/API Hosting Model
 
-Scope: Blazor Web App + Tailwind CSS + API integration + browser debugging.
+Decision: separate origins (Option A).
 
-Evidence base: supplied repository documents and Phase 01 source. No build or tests were run by the reviewer.
+Options compared:
 
----
+- **A.** Separate `TradingAgent.Web` and `TradingAgent.Api` origins with properly configured CORS.
+- **B.** Same-origin hosting of Blazor and API.
 
-## 1. Executive Summary
-
-- **Phase 01 layering matches `ARCHITECTURE.md`.** Domain has no references, Application references Domain, and Infrastructure references Application and Domain. Api references Application and Infrastructure as the composition root. The Phase 01 build result is user-reported only.
-- **Blocker:** the DTOs Blazor needs (`StatusResponse`, `AgentChatRequest`, `AgentChatResponse`) live inside `TradingAgent.Api`.
-- **Render mode decides whether acceptance criterion 4 is achievable.** With Interactive Server, the API call is not visible in Chrome Network.
-- **`/api/status` never reaches Application or Infrastructure.** An end-to-end trace through the layers needs `/api/agent/chat`.
-- **Phase Impact: Modify plan** before implementation starts.
+Evaluated against: professional architecture, browser HTTP debugging, Chrome DevTools Network, Visual Studio debugging, maintainability, security, future TradingView webhooks, future AI dashboard, and R0 development.
 
 ---
 
-## 2. Findings
+## Recommendation
 
-| Render mode | API call visible in Chrome | CORS needed | Note |
-|---|---|---|---|
-| Interactive Server | No (only the SignalR socket) | No | Debug via Visual Studio only |
-| Interactive WebAssembly | Yes | Yes | The browser talks to the API directly |
-| Auto | Depends on the phase | Yes | Two runtime paths, so harder to debug |
-
-- **Contracts:** the three records are in `TradingAgent.Api/Contracts/`. A Web reference to Api pulls in the Web SDK and `Program`. `StatusEndpointTests` also imports `TradingAgent.Api.Contracts`.
-- **CORS:** `Program.cs` configures none, so WASM calls would fail at preflight.
-- **HTTPS redirect:** `app.UseHttpsRedirection()` combined with the `http` profile (port 5153) means a Web client targeting HTTP gets a redirect. The Web client should use `https://localhost:7062` (`launchSettings.json`).
-- **Two error shapes:** `ApiExceptionHandler` returns `ProblemDetails`. The empty-message check in `AgentEndpoints` returns `ValidationProblem`. The Web client must handle both, plus the API-down case with no body.
-- **Timeouts:** the Ollama timeout is 2 minutes (`appsettings.json`). The default `HttpClient` timeout is 100 seconds, so a Web client would time out first on a CPU-bound `qwen3:1.7b` call and show a misleading error.
-- **Status is not health:** `/api/status` returns "Running" without checking Ollama, so a green dashboard proves nothing about the AI path.
-- **Tailwind:** the repo has no Node tooling (`node_modules/` is git-ignored). R0 fits the Tailwind standalone CLI, but its build integration is undefined.
-- **Documentation gaps:** `.github/copilot-instructions.md` still says "Blazor later / Tailwind later". `PHASES.md` is referenced but was not in the supplied context. Both `Reviews/*.md` files were empty.
+- **Choose A:** separate `TradingAgent.Web` and `TradingAgent.Api` origins, with an allow-listed CORS policy (named origin from configuration, Development only, never a wildcard).
+- Keep the API base URL in Web configuration so the client works unchanged if you later switch to same-origin.
+- Keep future TradingView webhook endpoints on the API origin only.
 
 ---
 
-## 3. Risks
+## Why
 
-- **Contract drift or boundary breach:** duplicated DTOs diverge silently, or Web references Api and violates the "UI must not own logic" boundary.
-- **Learning-goal mismatch:** Interactive Server fails the Chrome Network goal. WASM exposes the API directly to the browser with no auth, which is acceptable locally but must be revisited before trade proposals or approval UI. CORS must be an allow-listed origin, never a wildcard.
-- **Misleading failures:** timeout ordering, API-down, and the two error shapes can surface as the same generic error in the UI.
-- **Build coupling:** a Tailwind step in MSBuild can break `dotnet build` or tests on a machine without the CLI. The generated CSS commit policy is undefined.
-- **False confidence:** a green status page is mistaken for a working AI path.
-
----
-
-## 4. Recommendation
-
-1. Create `TradingAgent.Contracts` (net10.0, no dependencies). Move the three records there, update namespaces and test usings, and reference it from Api and Web. Web must not reference Api, Application, or Infrastructure.
-2. Add a typed API client in Web via `AddHttpClient`, with the base URL from configuration. It returns a result type (success, or failure with status and problem title) and never throws to the UI. Set its timeout above Ollama's.
-3. Use Interactive WebAssembly for the dashboard. Add a named CORS policy in Api that allow-lists the Web origin from configuration, Development only.
-4. Use Visual Studio multi-project startup (Api + Web, HTTPS profiles). Document the ports in `PHASE-02.md`.
-5. Use the pinned Tailwind standalone CLI, with no Node dependency. Commit the input CSS, and decide explicitly whether the generated output is committed or built.
-6. Tests:
-   - Client unit tests using the existing `StubHttpMessageHandler` pattern (200, 503 ProblemDetails, 400 validation, connection failure, timeout).
-   - bUnit tests (free) for the loading, error, and success states.
-   - One `WebApplicationFactory` test for the CORS header.
-7. Debugging exercises: success trace, API stopped (error state), Ollama stopped (503 via chat), and a server breakpoint in `HandleChatAsync` followed by Step Into through `OllamaService`. Update `copilot-instructions.md` and supply `PHASES.md`.
+- **Learning goals:** A is the only option where you debug CORS and preflight (`OPTIONS`) in Chrome Network. That is a common real-world failure mode, and Phase 02 exists to teach this kind of troubleshooting. With B the browser call is still visible, but there is no preflight and nothing cross-origin to diagnose.
+- **Professional architecture:** two origins enforce the boundary in `ARCHITECTURE.md`. The UI has no in-process access to Application or Infrastructure, only the HTTP contract.
+- **Visual Studio debugging:** with two projects you debug the API and the Web host as separate processes in one multi-project session. That is a cleaner mental model of browser → HTTP → server than one merged host.
+- **TradingView webhooks:** webhooks are server-to-server, so CORS is irrelevant to them. They do need a public URL, and with A you can expose only the API (or only the webhook route) through a tunnel without publishing the dashboard.
+- **Security and R0:** the allow-list is a small, explicit trust surface with no cost. The extra security complexity of A is limited to configuration.
 
 ---
 
-## 5. Decision Required
+## Trade-offs
 
-1. **Render mode:** WebAssembly (recommended, since it satisfies criterion 4) or Interactive Server (simpler, but Chrome Network will show only the socket).
-2. **Contracts:** shared `TradingAgent.Contracts` project (recommended) or Web-owned DTOs with contract tests.
-3. **Scope of API integration:** include a minimal chat call (single message, no history or streaming) so criteria 6 and 7 trace through Application, Infrastructure, and Ollama (recommended). Otherwise, status only, and those criteria are reworded to stop at the endpoint.
+- **More moving parts:** two processes, two ports, CORS config, and a base URL to keep consistent across environments.
+- **A larger browser-exposed surface:** the API is called directly from the browser with no auth today. That is acceptable locally, but it must be revisited before the trade proposal or approval UI exists.
+- **Same-origin (B) is simpler and safer for auth:** cookie-based sessions, antiforgery, and no CORS surface. B is the stronger option once real approval gates exist, possibly via a BFF pattern. You may revisit it then.
+- **Debugging pitfalls:** misconfigured CORS looks like a network failure in the Console. The HTTPS redirect (port 5153 to 7062) can also break calls, so the Web client must use the HTTPS API URL.
+- **Test cost:** you need one extra `WebApplicationFactory` test to verify the CORS headers.
 
 ---
 
-## 6. Phase Impact
+## Decision
 
-**Modify plan.** Resolve the three decisions above, then proceed. There are no Phase 01 issues that require stopping.
+Adopt A, with Development-only allow-listed CORS and a configurable API base URL, and defer the same-origin/BFF question until the approval UI phase.
