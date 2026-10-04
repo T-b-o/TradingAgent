@@ -1,66 +1,366 @@
-# Phase 02 — Copilot Implementation
+# Phase 02 — Copilot Implementation Task
 
-Read all relevant CodingSkillAgent documentation before changing code.
+## Source of Truth
 
-## First
+Read before making changes:
 
-Inspect the actual repository.
+- CodingSkillAgent/PROJECT_CONTEXT.md
+- CodingSkillAgent/ARCHITECTURE.md
+- CodingSkillAgent/PHASES.md
+- CodingSkillAgent/STATUS.md
+- CodingSkillAgent/DEVELOPMENT_RULES.md
+- CodingSkillAgent/COST_POLICY.md
+- CodingSkillAgent/MODEL_POLICY.md
+- CodingSkillAgent/Phases/PHASE-02.md
+- CodingSkillAgent/Reviews/PHASE-02-CLAUDE-REVIEW.md
 
-Verify:
-- Phase 01 build
-- relevant tests
-- current API
-- current project references
-- current Git state
+The Claude review is architecture input, not an unconditional instruction.
+Verify its findings against the actual repository.
 
-Then present:
-- planned files
-- planned changes
-- expected runtime flow
+---
 
-## Implement
+# Phase 02 Objective
 
-Phase 02 only:
+Build the first Blazor Web App and establish a professional browser-to-API
+debugging workflow.
 
-- TradingAgent.Web
-- Blazor Web App
-- Tailwind CSS
-- API client/service abstraction
-- status/dashboard page
+Target runtime flow:
+
+Browser
+    ↓
+Blazor Web App
+    ↓
+HTTP
+    ↓
+TradingAgent.Api
+    ↓
+Application
+    ↓
+Response
+    ↓
+Blazor
+    ↓
+Browser
+
+---
+
+# Approved Architecture Decisions
+
+## 1. Separate Web and API Origins
+
+Use:
+
+TradingAgent.Web
+    +
+TradingAgent.Api
+
+The Web project communicates with the API over HTTP.
+
+Do not merge the Web and API hosts during Phase 02.
+
+---
+
+## 2. CORS
+
+Implement a named CORS policy.
+
+Development must use an explicit configured origin.
+
+Do NOT use:
+
+AllowAnyOrigin()
+
+Do NOT use wildcard CORS for the browser application.
+
+Allowed origins must come from configuration.
+
+Do not hard-code the Blazor URL inside application logic.
+
+---
+
+## 3. API Base URL
+
+TradingAgent.Web must use configuration for the API base URL.
+
+Do not hard-code the API URL in Blazor components.
+
+The configuration must allow different values for:
+- Development
+- Test
+- Production
+
+---
+
+## 4. Existing API
+
+Keep the existing API contracts.
+
+Phase 02 may use:
+
+GET /api/status
+
+POST /api/agent/chat
+
+Do not redesign these endpoints unless an actual technical problem requires it.
+
+---
+
+# Blazor Scope
+
+Create:
+
+TradingAgent.Web
+
+Use the current supported Blazor Web App approach for .NET 10.
+
+Implement:
+
+- application shell/layout
+- navigation
+- status page
+- API connectivity indicator
+- basic AI chat page
 - loading state
 - error state
-- dependency injection
-- relevant tests
-- browser-debugging support
+- empty state
+- API response display
 
-## Do Not Add
+Keep UI clean and professional.
+
+Do not spend excessive time on visual polish.
+
+---
+
+# Tailwind CSS
+
+Use Tailwind CSS for styling.
+
+Keep the Tailwind setup:
+- simple
+- maintainable
+- current
+- development-friendly
+
+Do not introduce unnecessary UI component libraries.
+
+---
+
+# API Client
+
+Create an API service/client abstraction.
+
+Blazor components should NOT contain raw HttpClient logic.
+
+Target flow:
+
+Blazor Component
+    ↓
+API Client
+    ↓
+HTTP
+    ↓
+TradingAgent.Api
+
+The API client should:
+- use dependency injection
+- use configuration
+- support cancellation
+- handle HTTP errors appropriately
+- return typed responses
+
+---
+
+# Error Handling
+
+Support at least:
+
+### API success
+
+HTTP 200
+
+### Validation failure
+
+HTTP 4xx
+
+### API unavailable
+
+Connection failure
+
+### Ollama unavailable
+
+API returns a safe error response.
+
+The UI should show a useful user-facing message.
+
+Do not expose internal stack traces.
+
+---
+
+# Browser Debugging Requirement
+
+The implementation must allow me to learn and demonstrate:
+
+Chrome
+    ↓
+Blazor
+    ↓
+HTTP request
+    ↓
+ASP.NET Core
+    ↓
+Application
+    ↓
+Response
+    ↓
+Blazor
+    ↓
+Chrome
+
+I must be able to inspect:
+
+Chrome:
+- Network
+- Request URL
+- method
+- headers
+- payload
+- status
+- response
+- timing
+- Console
+
+Visual Studio:
+- breakpoint
+- Locals
+- Watch
+- Call Stack
+- Step Over
+- Step Into
+- exception details
+- Output
+
+---
+
+# CORS Debugging Exercise
+
+Ensure one deliberate test demonstrates:
+
+Blazor origin
+    ↓
+OPTIONS preflight
+    ↓
+API
+    ↓
+CORS response
+
+I must be able to identify the CORS request in Chrome Network.
+
+Do not create a fake exercise.
+Use the real application's development configuration.
+
+---
+
+# Tests
+
+Add only useful tests.
+
+Required where appropriate:
+
+- API status integration coverage
+- API client behaviour
+- error handling
+- CORS configuration
+- Blazor/API integration behaviour that is practical to test
+
+Do not add meaningless coverage.
+
+---
+
+# Out of Scope
+
+Do NOT add:
 
 - TradingView
-- trading strategy
-- strategy skills
-- broker
+- Pine strategy
+- user's trading strategy
+- AI skill system
+- broker integration
 - live trading
 - paper trading
-- advanced charts
+- advanced market charts
+- news integration
+- paid cloud AI
+- unnecessary external services
 
-## Verification
+---
 
-After implementation:
+# Code Quality
 
-1. build the full solution
-2. run relevant tests
-3. report exact results
-4. identify actual changed files
-5. update:
-   - CodingSkillAgent/STATUS.md
-   - CodingSkillAgent/Phases/PHASE-02.md
-   - CodingSkillAgent/CHANGELOG.md
+Use:
 
-Only mark the phase COMPLETE when evidence supports completion.
+- C# / .NET 10
+- nullable-aware code
+- dependency injection
+- async/await
+- CancellationToken
+- strong typing
+- clear names
+- focused services
+- concise XML documentation where appropriate
 
-## Git Approval Rule
+Keep comments useful.
+
+Do not put business logic into Blazor components.
+
+Do not put Ollama HTTP implementation into Blazor.
+
+---
+
+# Verification
+
+Before reporting completion:
+
+1. Build the full solution.
+2. Run relevant tests.
+3. Start Web + API.
+4. Verify the browser application.
+5. Verify /api/status through the Web application.
+6. Verify the chat request.
+7. Verify CORS behaviour.
+8. Test at least one failure path.
+9. Verify the Visual Studio breakpoint.
+10. Verify Chrome Network inspection.
+
+Report actual results.
+
+Do not claim anything was tested unless it was actually tested.
+
+---
+
+# Phase Documentation
+
+After the implementation is verified:
+
+Update:
+
+CodingSkillAgent/STATUS.md
+
+CodingSkillAgent/Phases/PHASE-02.md
+
+CodingSkillAgent/CHANGELOG.md
+
+Use Git to determine the actual files changed.
+
+Do not invent the changed-file list.
+
+---
+
+# Git Approval Rule
+
+You may modify local files.
 
 You MUST NOT:
+
 - git commit
 - git push
 - merge
@@ -68,18 +368,25 @@ You MUST NOT:
 
 without explicit user approval.
 
-Before any commit/push, show:
+Before asking for approval, show:
 
-- changed files
-- build result
-- test result
-- proposed commit message
+### Changed Files
+Actual files changed.
 
-Then ask:
+### Build
+Actual build result.
+
+### Tests
+Actual test results.
+
+### Commit Message
+Proposed commit message.
+
+Then ask exactly:
 
 "Do you approve the commit and push?"
 
-If the answer is not explicit approval:
+If approval is not explicitly given:
 - do not commit
 - do not push
-- leave the changes local
+- leave changes local
