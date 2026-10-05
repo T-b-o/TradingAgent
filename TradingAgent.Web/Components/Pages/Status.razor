@@ -1,0 +1,77 @@
+@page "/status"
+@using TradingAgent.Web.Models
+@using TradingAgent.Web.Services
+@inject TradingAgentApiClient ApiClient
+
+<PageTitle>API Status</PageTitle>
+
+<div class="space-y-6">
+    <section class="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
+        <div class="flex items-center justify-between gap-3">
+            <div>
+                <p class="text-sm font-medium uppercase tracking-[0.18em] text-slate-500">Connectivity</p>
+                <h1 class="mt-2 text-2xl font-semibold text-slate-900">API health</h1>
+            </div>
+            @if (_isLoading)
+            {
+                <span class="rounded-full border border-amber-200 bg-amber-50 px-3 py-1 text-xs font-medium text-amber-700">Checking...</span>
+            }
+            else if (_result?.IsSuccess == true)
+            {
+                <span class="rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1 text-xs font-medium text-emerald-700">Connected</span>
+            }
+            else
+            {
+                <span class="rounded-full border border-red-200 bg-red-50 px-3 py-1 text-xs font-medium text-red-700">Unavailable</span>
+            }
+        </div>
+    </section>
+
+    @if (_isLoading)
+    {
+        <div class="rounded-2xl border border-slate-200 bg-white p-8 text-sm text-slate-600 shadow-sm">
+            Waiting for the API status response...
+        </div>
+    }
+    else if (_result is null)
+    {
+        <div class="rounded-2xl border border-slate-200 bg-white p-8 text-sm text-slate-600 shadow-sm">
+            No status data is available.
+        </div>
+    }
+    else if (_result.IsSuccess && _result.Value is not null)
+    {
+        <div class="grid gap-4 md:grid-cols-3">
+            <div class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+                <p class="text-sm text-slate-500">Application</p>
+                <p class="mt-2 text-xl font-semibold text-slate-900">@_result.Value.Application</p>
+            </div>
+            <div class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+                <p class="text-sm text-slate-500">Status</p>
+                <p class="mt-2 text-xl font-semibold text-slate-900">@_result.Value.Status</p>
+            </div>
+            <div class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+                <p class="text-sm text-slate-500">Framework</p>
+                <p class="mt-2 text-xl font-semibold text-slate-900">@_result.Value.Framework</p>
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="rounded-2xl border border-red-200 bg-red-50 p-5 text-sm text-red-800 shadow-sm">
+            <p class="font-semibold">API unavailable</p>
+            <p class="mt-2">@_result.ErrorMessage</p>
+        </div>
+    }
+</div>
+
+@code {
+    private bool _isLoading = true;
+    private ApiResult<ApiStatusResponse>? _result;
+
+    protected override async Task OnInitializedAsync()
+    {
+        _result = await ApiClient.GetStatusAsync();
+        _isLoading = false;
+    }
+}

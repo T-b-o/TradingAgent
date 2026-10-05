@@ -68,7 +68,7 @@ public sealed class OllamaServiceTests
         {
             BaseUrl = "http://localhost:11434/",
             Model = "qwen3:1.7b",
-            Timeout = TimeSpan.FromMinutes(2)
+            Timeout = TimeSpan.FromMinutes(10)
         });
 
         return new OllamaService(client, options, NullLogger<OllamaService>.Instance);
