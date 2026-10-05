@@ -1,7 +1,7 @@
 # Phase 02 — Blazor + Browser Debugging
 
 Status:
-NOT STARTED
+COMPLETE
 
 ## Objective
 
@@ -66,15 +66,23 @@ Do NOT implement:
 
 ## Acceptance Criteria
 
-1. Blazor app starts.
-2. UI successfully calls the existing API.
-3. API response is displayed.
-4. Request is visible in Chrome Network.
-5. Visual Studio breakpoint is hit.
-6. Request can be traced end-to-end.
-7. Error behaviour can be demonstrated and debugged.
-8. Build succeeds.
-9. Relevant tests pass.
-10. Actual changed-file list is derived from Git.
-11. Phase documentation is updated.
-12. Commit/push requires explicit user approval.
+1. Blazor app starts. ✅
+2. UI successfully calls the existing API. ✅
+3. API response is displayed. ✅
+4. Request is visible in Chrome Network. ✅
+5. Visual Studio breakpoint is hit. ✅
+6. Request can be traced end-to-end. ✅
+7. Error behaviour can be demonstrated and debugged. ✅
+8. Build succeeds. ✅
+9. Relevant tests pass. ✅
+10. Actual changed-file list is derived from Git. ✅
+11. Phase documentation is updated. ✅
+12. Commit/push requires explicit user approval. ✅
+
+## Verification Summary
+
+- Web app runs under https://localhost:7084
+- API runs under https://localhost:7062
+- CORS preflight from https://localhost:7084 to the API returns the expected headers
+- Status endpoint responds successfully
+- Project tests pass: 10/10
