@@ -10,7 +10,7 @@ Read:
 
 - CodingSkillAgent/PROJECT_CONTEXT.md
 - CodingSkillAgent/ARCHITECTURE.md
-- CodingSkillAgent/PHASES.md
+- CodingSkillAgent/TECHNOLOGY-POLICY.md
 - CodingSkillAgent/STATUS.md
 - CodingSkillAgent/CHANGELOG.md
 - CodingSkillAgent/DEVELOPMENT_RULES.md
@@ -85,6 +85,7 @@ Evaluate:
 - loading states
 - UI/API contracts
 - Tailwind integration
+- technology policy compliance
 - debugging workflow
 - testing strategy
 
@@ -114,6 +115,15 @@ The review must identify:
 - what should be inspected in Call Stack
 - what should be inspected in Chrome Network
 - important failure cases to demonstrate
+
+## Technology Governance Requirement
+
+Flag any unapproved package, framework, library, runtime, service, provider,
+middleware, database, hosting platform, telemetry product, authentication
+provider, external API, or architecture-changing technology.
+
+Do not approve technology changes. If one appears necessary, say that it needs a
+Technology Change Request.
 
 ## Output
 

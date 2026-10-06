@@ -5,7 +5,7 @@ This is a professional local AI Forex Trading Agent.
 Read the current project documentation under:
 - CodingSkillAgent/PROJECT_CONTEXT.md
 - CodingSkillAgent/ARCHITECTURE.md
-- CodingSkillAgent/PHASES.md
+- CodingSkillAgent/TECHNOLOGY-POLICY.md
 - CodingSkillAgent/STATUS.md
 - CodingSkillAgent/COST_POLICY.md
 - CodingSkillAgent/MODEL_POLICY.md
@@ -13,13 +13,38 @@ Read the current project documentation under:
 
 ## Current Stack
 
+The approved baseline stack is defined in:
+
+CodingSkillAgent/TECHNOLOGY-POLICY.md
+
+Current approved baseline:
 - C#
 - .NET 10
 - ASP.NET Core 10
+- Blazor Web App
+- Tailwind CSS
+- ASP.NET Core APIs + OpenAPI
 - Ollama
-- Blazor Web App later
-- Tailwind later
 - xUnit
+
+## Technology Governance
+
+Before implementation, inspect CodingSkillAgent/TECHNOLOGY-POLICY.md.
+
+Do not add, install, configure, replace, or use a new technology unless it is
+already approved by project documentation.
+
+NuGet packages, npm packages, JavaScript libraries, CSS/UI frameworks,
+middleware, SDKs, external APIs, services, databases, hosting platforms,
+authentication providers, telemetry products, AI providers, and model runtimes
+all count as technology additions.
+
+If a technology addition is required, stop and produce a Technology Change
+Request using:
+
+CodingSkillAgent/Prompts/TECHNOLOGY-CHANGE-REQUEST.md
+
+Wait for explicit user approval before implementation.
 
 ## Architecture
 
@@ -65,11 +90,15 @@ Do not add paid LLM APIs.
 
 Before changing code:
 1. inspect current implementation
-2. understand the phase
-3. make the smallest correct change
-4. build
-5. run relevant tests
-6. report actual results
+2. read the latest ChatGPT-approved Copilot development prompt under `.github/Prompts/`
+3. understand the approved phase, bug fix, improvement, or follow-up scope
+4. make the smallest correct change
+5. build
+6. run relevant tests
+7. report actual results
+
+If no ChatGPT-approved Copilot development prompt exists for the requested code
+change, stop and ask for one before implementation.
 
 ## Debugging
 

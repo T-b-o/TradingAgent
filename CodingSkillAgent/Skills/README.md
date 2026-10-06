@@ -14,6 +14,8 @@ Each skill must:
 - include testing guidance
 - avoid obsolete patterns
 - avoid unnecessary paid dependencies
+- follow `CodingSkillAgent/TECHNOLOGY-POLICY.md` before introducing any new
+  technology, dependency, service, provider, runtime, package, or framework
 
 Examples that will be created later:
 

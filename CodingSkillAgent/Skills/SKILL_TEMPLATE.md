@@ -14,6 +14,10 @@ Use currently supported technology and APIs.
 
 Avoid obsolete approaches unless there is a specific compatibility reason.
 
+Before recommending or introducing any new dependency, framework, service,
+runtime, provider, package, or architectural technology, follow
+`CodingSkillAgent/TECHNOLOGY-POLICY.md`.
+
 ## R0 Requirement
 
 Prefer:
@@ -23,6 +27,9 @@ Prefer:
 - free/open-source dependencies
 
 Do not introduce paid runtime services.
+
+Free/open-source dependencies are not automatically approved. If they are new to
+the project, stop and require a Technology Change Request before implementation.
 
 ## Implementation Guidance
 

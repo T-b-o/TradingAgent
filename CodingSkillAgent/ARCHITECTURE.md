@@ -20,6 +20,10 @@ Domain must remain independent of:
 - database implementations
 - external providers
 
+New technology that changes dependency direction, runtime flow, hosting,
+integration boundaries, packages, services, providers, or frameworks must pass
+through `CodingSkillAgent/TECHNOLOGY-POLICY.md` before implementation.
+
 ---
 
 ## Api
@@ -193,6 +197,13 @@ Human Approval
 Paper Trade
 
 Live broker integration is a late optional phase.
+
+TradingView, market-data providers, databases, authentication, charting
+libraries, broker integrations, hosting platforms, telemetry products, and other
+future technologies are not automatically approved by being named here. They
+must pass through the Technology Change Gate before implementation unless an
+existing project document has explicitly approved the specific technology and
+scope.
 
 ---
 
