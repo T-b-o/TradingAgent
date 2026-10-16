@@ -50,6 +50,22 @@ public sealed class TradingAgentApiClientTests
     }
 
     [Fact]
+    public async Task SendChatAsync_WhenRequestTimesOut_ReturnsFailure()
+    {
+        using var httpClient = new HttpClient(new StubHttpMessageHandler(
+            (_, _) => throw new OperationCanceledException("The request timed out.")))
+        {
+            BaseAddress = new Uri("https://localhost/")
+        };
+        var apiClient = new TradingAgentApiClient(httpClient);
+
+        var result = await apiClient.SendChatAsync("Analyse EURUSD");
+
+        Assert.False(result.IsSuccess);
+        Assert.Equal("The request to the TradingAgent API timed out.", result.ErrorMessage);
+    }
+
+    [Fact]
     public async Task SendChatAsync_WhenCallerCancels_PropagatesCancellation()
     {
         using var httpClient = new HttpClient(new StubHttpMessageHandler(

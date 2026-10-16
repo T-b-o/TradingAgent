@@ -108,6 +108,9 @@ Use for:
 Claude Desktop is not assumed to have live repository editing access in the
 current development setup.
 
+Claude must flag unapproved technology additions or replacements and must not
+silently approve architecture-changing technology choices.
+
 ### GitHub Copilot in Visual Studio
 
 Use for:
@@ -120,6 +123,11 @@ Use for:
 
 Copilot works against the actual repository opened in Visual Studio.
 
+Copilot must inspect `CodingSkillAgent/TECHNOLOGY-POLICY.md` before
+implementation and stop for user approval before adding any unapproved
+technology, dependency, framework, package, runtime, service, or architectural
+replacement.
+
 ### ChatGPT
 
 Use for:
@@ -129,9 +137,21 @@ Use for:
 - knowledge checks
 - challenging design decisions
 
+ChatGPT is responsible for deciding whether a proposed technology change must
+be brought to the user for approval. ChatGPT must never silently approve a
+technology change.
+
+Whenever Copilot needs to make code changes, ChatGPT must first create or
+update the Copilot development prompt from the relevant Claude review, user
+request, repository finding, and approved project rules. This applies to new
+phases, bug fixes, improvements, refactoring, tests, and follow-up work.
+
 ### Ollama
 
 Use as the actual AI runtime for the trading application.
+
+Ollama is the runtime LLM only and must not bypass C# application controls,
+approval gates, or technology governance.
 
 ---
 
@@ -147,12 +167,21 @@ The Git repository is the source of truth for:
 CodingSkillAgent is the source of truth for:
 - architecture decisions
 - development rules
+- technology policy and technology approval gates
 - phase definitions
 - AI-assistant instructions
+- ChatGPT-created Copilot development prompts
 - cost policy
 - model policy
 
 Never rely on an AI conversation as the only project record.
+
+Technology governance is defined in:
+
+`CodingSkillAgent/TECHNOLOGY-POLICY.md`
+
+Any unapproved technology addition or replacement requires explicit user
+approval through a Technology Change Request before implementation.
 
 ---
 

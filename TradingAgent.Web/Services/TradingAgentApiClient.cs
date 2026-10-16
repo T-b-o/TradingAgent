@@ -1,25 +1,44 @@
 using System.Net.Http.Json;
 using System.Text.Json;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 using TradingAgent.Web.Models;
 
 namespace TradingAgent.Web.Services;
 
+/// <summary>
+/// Calls the TradingAgent API and normalizes HTTP, timeout, and availability failures into stable UI messages.
+/// </summary>
 public sealed class TradingAgentApiClient
 {
     private readonly HttpClient _httpClient;
+    private readonly ILogger<TradingAgentApiClient> _logger;
 
-    public TradingAgentApiClient(HttpClient httpClient)
+    public TradingAgentApiClient(HttpClient httpClient, ILogger<TradingAgentApiClient>? logger = null)
     {
         _httpClient = httpClient;
+        _logger = logger ?? NullLogger<TradingAgentApiClient>.Instance;
     }
 
+    /// <summary>
+    /// Queries the API health endpoint and normalizes connectivity and HTTP errors.
+    /// </summary>
+    /// <param name="cancellationToken">The cancellation token for the in-flight request.</param>
+    /// <returns>The status result, including a user-friendly error when the API is unreachable.</returns>
     public async Task<ApiResult<ApiStatusResponse>> GetStatusAsync(CancellationToken cancellationToken = default)
     {
         return await SendAsync<ApiStatusResponse>(
+            nameof(GetStatusAsync),
             () => _httpClient.GetAsync("/api/status", cancellationToken),
             cancellationToken);
     }
 
+    /// <summary>
+    /// Sends a chat message to the local TradingAgent API and returns a normalized result.
+    /// </summary>
+    /// <param name="message">The message to submit to the API.</param>
+    /// <param name="cancellationToken">The cancellation token for the request.</param>
+    /// <returns>The chat result, including timeout and connectivity failures.</returns>
     public async Task<ApiResult<AgentChatResponse>> SendChatAsync(string message, CancellationToken cancellationToken = default)
     {
         if (string.IsNullOrWhiteSpace(message))
@@ -29,11 +48,13 @@ public sealed class TradingAgentApiClient
 
         var payload = new { message };
         return await SendAsync<AgentChatResponse>(
+            nameof(SendChatAsync),
             () => _httpClient.PostAsJsonAsync("/api/agent/chat", payload, cancellationToken),
             cancellationToken);
     }
 
     private async Task<ApiResult<T>> SendAsync<T>(
+        string operationName,
         Func<Task<HttpResponseMessage>> requestFactory,
         CancellationToken cancellationToken)
     {
@@ -42,13 +63,30 @@ public sealed class TradingAgentApiClient
             using var response = await requestFactory();
             return await ReadResponseAsync<T>(response, cancellationToken);
         }
-        catch (HttpRequestException)
+        catch (HttpRequestException exception)
         {
+            _logger.LogError(
+                exception,
+                "TradingAgent API request failed while {Operation}. BaseAddress={BaseAddress}. HttpRequestError={HttpRequestError}.",
+                operationName,
+                _httpClient.BaseAddress,
+                exception.HttpRequestError);
+
             return ApiResult<T>.Failure("The TradingAgent API is unavailable. Verify the API is running and reachable.");
         }
-        catch (OperationCanceledException) when (!cancellationToken.IsCancellationRequested)
+        catch (OperationCanceledException exception) when (!cancellationToken.IsCancellationRequested)
         {
+            _logger.LogWarning(
+                exception,
+                "TradingAgent API request timed out while {Operation}. BaseAddress={BaseAddress}.",
+                operationName,
+                _httpClient.BaseAddress);
+
             return ApiResult<T>.Failure("The request to the TradingAgent API timed out.");
+        }
+        catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested)
+        {
+            throw;
         }
     }
 

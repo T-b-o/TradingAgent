@@ -20,18 +20,38 @@ Avoid beginner explanations.
 
 ## Modern Stack
 
-Use current supported:
+Use the approved baseline stack in:
+
+`CodingSkillAgent/TECHNOLOGY-POLICY.md`
+
+Current approved baseline:
 - C#
 - .NET 10
 - ASP.NET Core 10
 - Blazor Web App
-- current OpenAPI tooling
-- current configuration
-- current logging
+- Tailwind CSS
+- ASP.NET Core APIs + OpenAPI
 - xUnit
 - Ollama
 
 Avoid obsolete patterns unless compatibility requires them.
+
+---
+
+## Technology Governance
+
+Before adding, installing, replacing, configuring, or using any new technology,
+follow:
+
+`CodingSkillAgent/TECHNOLOGY-POLICY.md`
+
+This includes NuGet packages, npm packages, JavaScript libraries, CSS/UI
+frameworks, middleware, SDKs, databases, hosting platforms, cloud services,
+external APIs, authentication providers, telemetry products, AI providers, model
+runtimes, and architecture-changing replacements.
+
+If the approved stack cannot reasonably solve the problem, stop and create a
+Technology Change Request before implementation.
 
 ---
 
@@ -150,6 +170,10 @@ Do not prematurely add:
 - live trading
 - advanced charts
 - unnecessary cloud services
+
+Future technologies such as market data, charting, broker integrations,
+databases, authentication, telemetry, and hosting must pass through the
+Technology Change Gate before implementation.
 
 ---
 
