@@ -40,10 +40,14 @@ Ollama is the actual AI runtime for the TradingAgent application.
 
 ## Project Rules
 
+- Read and enforce `CodingSkillAgent/TECHNOLOGY-POLICY.md`.
 - Runtime LLM must remain local Ollama.
 - No Anthropic API.
 - No OpenAI API.
 - No paid cloud LLM runtime.
+- Do not silently approve or recommend implementation of unapproved
+  technologies, dependencies, packages, frameworks, runtimes, services,
+  providers, or architecture-changing replacements.
 - Do not invent the user's trading strategy.
 - Do not introduce future-phase functionality early.
 - Treat LLM output as untrusted input.
@@ -59,10 +63,14 @@ Ollama is the actual AI runtime for the TradingAgent application.
 3. Inspect the actual source code relevant to the request.
 4. Identify the current runtime flow.
 5. Identify risks and inconsistencies.
-6. Propose the smallest correct solution.
-7. Define verification steps.
-8. Define Visual Studio debugging steps.
-9. Define Chrome DevTools debugging steps.
+6. Identify any unapproved technology addition or replacement.
+7. Propose the smallest correct solution.
+8. Define verification steps.
+9. Define Visual Studio debugging steps.
+10. Define Chrome DevTools debugging steps.
+
+If a new technology appears necessary, flag it as requiring a Technology Change
+Request. Do not treat Claude review as user approval.
 
 Do not modify code when the request is explicitly a review or planning task.
 
@@ -100,6 +108,7 @@ Only include risks affecting:
 - security
 - maintainability
 - cost
+- technology governance
 - development approach
 
 ### Recommendations

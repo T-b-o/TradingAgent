@@ -24,6 +24,7 @@ git log --stat
 - modified files
 - deleted files
 - dependencies changed
+- technology policy compliance
 - architecture decisions
 - known issues
 - next phase
@@ -39,6 +40,15 @@ git log --stat
 Do not guess which files changed.
 
 Use Git.
+
+## Technology Policy
+
+Check whether any package, framework, library, runtime, middleware, database,
+provider, hosting platform, telemetry product, authentication provider, external
+API, service, or architecture-changing technology was added or replaced.
+
+If yes, confirm it was explicitly approved through
+`CodingSkillAgent/TECHNOLOGY-POLICY.md` before recording the phase as complete.
 
 ## Git Approval
 

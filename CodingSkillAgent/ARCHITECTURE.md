@@ -20,6 +20,10 @@ Domain must remain independent of:
 - database implementations
 - external providers
 
+New technology that changes dependency direction, runtime flow, hosting,
+integration boundaries, packages, services, providers, or frameworks must pass
+through `CodingSkillAgent/TECHNOLOGY-POLICY.md` before implementation.
+
 ---
 
 ## Api
@@ -90,23 +94,37 @@ Tests should verify behaviour rather than simply increase coverage.
 
 ---
 
-## Future Web Project
-
-TradingAgent.Web
+## TradingAgent.Web
 
 Responsibilities:
-- Blazor Web App
-- Tailwind CSS
-- dashboard
-- analysis display
-- trade proposal display
-- user approval UI
+- Blazor Web App using `InteractiveServer`
+- Tailwind CSS UI shell
+- dashboard and status pages
+- local AI chat interface
+- API client abstraction for server-side UI requests
+
+The current UI path is:
+Browser
+    ↓
+Blazor Server
+    ↓
+HttpClient
+    ↓
+ASP.NET Core API
+    ↓
+Application
+    ↓
+Infrastructure
+    ↓
+Ollama
 
 The UI must NOT:
 - call Ollama directly
 - own trading strategy rules
 - calculate financial risk independently
 - place trades directly
+
+The browser does not make direct cross-origin API calls in the active UI path. The configured CORS policy remains in place for explicit policy validation and future compatibility testing, but the current `InteractiveServer` app calls the API from the Web host server process.
 
 ---
 
@@ -193,6 +211,13 @@ Human Approval
 Paper Trade
 
 Live broker integration is a late optional phase.
+
+TradingView, market-data providers, databases, authentication, charting
+libraries, broker integrations, hosting platforms, telemetry products, and other
+future technologies are not automatically approved by being named here. They
+must pass through the Technology Change Gate before implementation unless an
+existing project document has explicitly approved the specific technology and
+scope.
 
 ---
 

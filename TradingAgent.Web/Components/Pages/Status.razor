@@ -61,17 +61,38 @@
         <div class="rounded-2xl border border-red-200 bg-red-50 p-5 text-sm text-red-800 shadow-sm">
             <p class="font-semibold">API unavailable</p>
             <p class="mt-2">@_result.ErrorMessage</p>
+            <button type="button"
+                    class="mt-4 inline-flex items-center rounded-xl bg-slate-900 px-4 py-2 text-sm font-semibold text-white transition hover:bg-slate-700 disabled:cursor-not-allowed disabled:bg-slate-400"
+                    disabled="@_isLoading"
+                    @onclick="RefreshAsync">
+                Retry
+            </button>
         </div>
     }
 </div>
 
 @code {
-    private bool _isLoading = true;
+    private bool _isLoading;
     private ApiResult<ApiStatusResponse>? _result;
 
-    protected override async Task OnInitializedAsync()
+    protected override async Task OnInitializedAsync() => await RefreshAsync();
+
+    private async Task RefreshAsync()
     {
-        _result = await ApiClient.GetStatusAsync();
-        _isLoading = false;
+        if (_isLoading)
+        {
+            return;
+        }
+
+        _isLoading = true;
+
+        try
+        {
+            _result = await ApiClient.GetStatusAsync();
+        }
+        finally
+        {
+            _isLoading = false;
+        }
     }
 }

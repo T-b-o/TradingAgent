@@ -2,9 +2,9 @@
 
 ## Current Phase
 
-Phase 02: COMPLETE
+Phase 02 remediation and verification.
 
-The Blazor Web app and browser-to-API debugging workflow are implemented in the repository and verified against the Phase 02 requirements.
+The repository currently reflects the approved `InteractiveServer` architecture and the Web app calls the API through the server-side `TradingAgentApiClient`. The codebase has been updated to improve retry handling, timeout diagnostics, and structured error logging, and the relevant tests pass.
 
 ---
 
@@ -20,48 +20,32 @@ The Blazor Web app and browser-to-API debugging workflow are implemented in the 
 
 ---
 
-## Phase 02 Verification
+## Verified Results
 
 Build:
-PASS
+PASS via `dotnet test` on the existing test project, which builds the solution projects.
 
 Tests:
-PASS
+PASS — 11 passed, 0 failed, 0 skipped.
 
-Runtime flow:
-PASS
+Launch-profile consistency:
+CHECKED — API HTTPS profile is configured for `https://localhost:7062` and the Web app base URL is configured to the same HTTPS address. The actual current configuration is aligned.
 
-Verified results:
-- Api runs on https://localhost:7062
-- Web runs on https://localhost:7084
-- Browser app successfully calls the API over HTTP
-- CORS preflight for the configured origin returns the expected headers
-- status endpoint and agent chat endpoint respond as expected
-
-The exact changed-file list must continue to be derived from Git.
-
-Do not invent the list.
-
-Useful commands:
-
-git log --stat
-
-git show --stat <commit>
-
-git diff <start>..<end> --name-status
+Architecture behaviour:
+CONFIRMED — the active UI path uses `InteractiveServer` and the browser does not directly call the API. The CORS policy is still present and tested, but it is not the current browser runtime path.
 
 ---
 
-## Completed Phase 02 Scope
+## Phase 02 Scope
 
 - TradingAgent.Web Blazor app
 - Tailwind CSS styling
-- named CORS policy from configuration
-- configurable API base URL in Web configuration
-- API client abstraction for UI calls
-- status dashboard page
-- AI chat page with loading/error states
-- browser-debugging flow for Chrome + Visual Studio
+- server-side API client abstraction for UI calls
+- status dashboard page with retry recovery
+- AI chat page with timeout and failure handling
+- configured HTTP timeout for API calls
+- debugging flow for server-side request diagnosis
+- CORS policy validation test that reflects the configured policy, not the actual browser path
 
 ---
 
@@ -121,4 +105,4 @@ without explicit user approval.
 
 ## Next Action
 
-Proceed with the next trading-domain phase after the current Blazor/browser-debugging foundation is accepted.
+Proceed only after code review confirms the remediation is acceptable. Manual browser verification remains optional and environment-dependent.

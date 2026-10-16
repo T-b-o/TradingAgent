@@ -6,7 +6,7 @@ Read before making changes:
 
 - CodingSkillAgent/PROJECT_CONTEXT.md
 - CodingSkillAgent/ARCHITECTURE.md
-- CodingSkillAgent/PHASES.md
+- CodingSkillAgent/TECHNOLOGY-POLICY.md
 - CodingSkillAgent/STATUS.md
 - CodingSkillAgent/DEVELOPMENT_RULES.md
 - CodingSkillAgent/COST_POLICY.md
@@ -16,6 +16,9 @@ Read before making changes:
 
 The Claude review is architecture input, not an unconditional instruction.
 Verify its findings against the actual repository.
+
+If this prompt conflicts with CodingSkillAgent/TECHNOLOGY-POLICY.md, the
+Technology Policy controls.
 
 ---
 
@@ -57,6 +60,9 @@ TradingAgent.Api
 The Web project communicates with the API over HTTP.
 
 Do not merge the Web and API hosts during Phase 02.
+
+Do not introduce replacement hosting, UI, CSS, runtime, API, or architecture
+technologies unless they have already passed the Technology Change Gate.
 
 ---
 
@@ -141,7 +147,11 @@ Keep the Tailwind setup:
 - current
 - development-friendly
 
-Do not introduce unnecessary UI component libraries.
+Do not introduce UI component libraries, CSS frameworks, JavaScript libraries,
+or npm packages unless already approved by project policy.
+
+If a package or framework appears necessary, stop and use
+CodingSkillAgent/Prompts/TECHNOLOGY-CHANGE-REQUEST.md.
 
 ---
 
@@ -291,6 +301,11 @@ Do NOT add:
 - news integration
 - paid cloud AI
 - unnecessary external services
+
+Also do NOT add any new package, framework, library, runtime, middleware,
+database, provider, hosting platform, telemetry product, authentication
+provider, or external service without explicit user approval through the
+Technology Change Gate.
 
 ---
 

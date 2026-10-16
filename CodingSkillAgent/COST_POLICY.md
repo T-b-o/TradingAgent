@@ -33,6 +33,9 @@ Prefer:
 - open-source/free dependencies
 - local testing
 
+All new technologies, including free and open-source dependencies, must also
+follow `CodingSkillAgent/TECHNOLOGY-POLICY.md`.
+
 ---
 
 ## Skills
@@ -49,6 +52,9 @@ If a proposed dependency introduces a cost:
 2. state the cost
 3. provide the closest R0 alternative
 4. wait for user approval
+
+If a proposed dependency is free but new to the project, still stop and use the
+Technology Change Gate before implementation.
 
 ---
 

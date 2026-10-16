@@ -23,7 +23,7 @@ The following files define project intent and workflow:
 
 - `CodingSkillAgent/PROJECT_CONTEXT.md`
 - `CodingSkillAgent/ARCHITECTURE.md`
-- `CodingSkillAgent/PHASES.md`
+- `CodingSkillAgent/TECHNOLOGY-POLICY.md`
 - `CodingSkillAgent/STATUS.md`
 - `CodingSkillAgent/DEVELOPMENT_RULES.md`
 - `CodingSkillAgent/COST_POLICY.md`
@@ -31,7 +31,7 @@ The following files define project intent and workflow:
 - `CodingSkillAgent/CHANGELOG.md`
 - Current phase file under `CodingSkillAgent/Phases/`
 - Claude reviews under `CodingSkillAgent/Reviews/`
-- Copilot prompts under `CodingSkillAgent/.github/Prompts/`
+- Copilot prompts under `.github/Prompts/`
 
 When these conflict, stop and resolve the conflict before development continues.
 
@@ -59,12 +59,51 @@ ChatGPT must:
 8. Prevent Copilot from implementing unapproved architecture changes.
 9. Review the implementation result after Copilot completes the task.
 10. Decide whether the phase is complete or requires another development/review cycle.
+11. Stop and request user approval before any unapproved technology change.
 
 ChatGPT must NOT blindly forward Claude recommendations to Copilot.
 
 Claude provides review and recommendations.
 
 ChatGPT makes the implementation decision.
+
+ChatGPT must not silently approve a new technology, dependency, framework,
+package, runtime, service, provider, or architecture-changing replacement. Use
+`CodingSkillAgent/Prompts/TECHNOLOGY-CHANGE-REQUEST.md` when approval is
+required.
+
+## ChatGPT Development Prompt Responsibility
+
+Whenever Copilot is expected to make code changes, ChatGPT must build or update
+the Copilot development prompt first.
+
+This applies to:
+- new phases
+- bug fixes
+- improvements
+- refactoring
+- test work
+- follow-up work from Claude reviews
+
+ChatGPT must base the prompt on:
+- the actual repository state
+- the relevant Claude review or finding
+- current architecture and development rules
+- `CodingSkillAgent/TECHNOLOGY-POLICY.md`
+- explicit user decisions
+
+The Copilot development prompt must clearly state:
+- objective
+- approved scope
+- files or areas likely to change
+- out-of-scope items
+- technology governance requirements
+- verification requirements
+- Git safety requirements
+
+Copilot must not be handed a raw Claude review as an implementation prompt.
+ChatGPT must translate reviewed, approved recommendations into a focused
+development prompt before Copilot changes code.
 
 ---
 
@@ -78,11 +117,14 @@ Claude must:
 - Inspect the current phase documentation.
 - Review implementation quality and architecture.
 - Identify risks, inconsistencies and improvements.
+- Flag unapproved technology additions or replacements.
 - Produce a concise review.
 
 Claude must NOT be treated as the implementation authority.
 
 Claude's review is an input into ChatGPT's decision process.
+
+Claude must not silently approve architectural technology changes.
 
 ---
 
@@ -93,6 +135,7 @@ Copilot is the implementation specialist.
 Copilot must:
 
 - Read the current project documentation.
+- Read `CodingSkillAgent/TECHNOLOGY-POLICY.md`.
 - Read the latest ChatGPT-approved implementation prompt.
 - Implement only the approved scope.
 - Build the solution.
@@ -103,6 +146,9 @@ Copilot must:
 Copilot must NOT independently:
 - redesign architecture,
 - expand phase scope,
+- add unapproved packages, frameworks, libraries, runtimes, services, providers,
+  middleware, databases, hosting platforms, telemetry products, or external
+  APIs,
 - introduce paid services,
 - change the trading methodology,
 - enable live trading,
@@ -116,6 +162,17 @@ Copilot must NOT independently:
 # Mandatory Handoff Workflow
 
 For every development phase use this sequence.
+
+For bug fixes, improvements, refactoring, tests, and other code-change work,
+use the same decision pattern at the appropriate scale:
+
+1. Inspect the relevant repository state.
+2. Read the relevant Claude review, issue, finding, or user request.
+3. Decide what is approved, rejected, deferred, or requires user approval.
+4. Create or update a Copilot development prompt under `.github/Prompts/`.
+5. Ensure the prompt includes Technology Policy, verification, and Git safety
+   requirements.
+6. Only then hand the work to Copilot.
 
 ### Step 1 — Claude Review
 
@@ -152,6 +209,7 @@ ChatGPT then determines:
 - What should not be implemented
 - What is deferred
 - Whether user approval is required
+- Whether any proposed technology change requires a Technology Change Request
 
 ChatGPT must not send Claude's review directly to Copilot without evaluating it.
 
@@ -161,7 +219,14 @@ ChatGPT must not send Claude's review directly to Copilot without evaluating it.
 
 ChatGPT must create or update:
 
-`CodingSkillAgent/.github/Prompts/PHASE-XX-COPILOT-IMPLEMENTATION.md`
+`.github/Prompts/PHASE-XX-COPILOT-IMPLEMENTATION.prompt.md`
+
+For non-phase work, use a clear task-specific prompt name under
+`.github/Prompts/`, for example:
+
+- `BUG-<short-name>-COPILOT-IMPLEMENTATION.prompt.md`
+- `IMPROVEMENT-<short-name>-COPILOT-IMPLEMENTATION.prompt.md`
+- `FOLLOWUP-<short-name>-COPILOT-IMPLEMENTATION.prompt.md`
 
 The Copilot prompt must represent ChatGPT's approved implementation scope.
 
@@ -174,6 +239,7 @@ The prompt must include:
 - Tests
 - Verification requirements
 - Explicit out-of-scope items
+- Technology Policy requirements
 - Git safety requirements
 
 The prompt must not contain rejected or deferred Claude recommendations as implementation instructions.
@@ -264,7 +330,8 @@ Claude:
 
 ChatGPT:
 - Decides what recommendations become implementation requirements.
-- Updates the Copilot implementation prompt.
+- Creates or updates the Copilot development prompt for phases, bug fixes,
+  improvements, refactoring, test work, and Claude-review follow-ups.
 
 Copilot:
 - Executes the approved implementation prompt.
@@ -284,8 +351,13 @@ Before starting any Copilot implementation, ChatGPT must verify that:
 3. A current Copilot implementation prompt exists.
 4. The Copilot prompt reflects the latest approved decisions.
 5. No unresolved architectural decision is being silently passed to Copilot.
+6. No unapproved technology change is being silently passed to Copilot.
 
 If any condition is false, stop the handoff and resolve it first.
+
+For bug fixes or improvements that do not have a Claude review, ChatGPT must
+document the triggering user request or repository finding in the Copilot prompt
+and decide whether a Claude review is needed before implementation.
 
 ---
 
