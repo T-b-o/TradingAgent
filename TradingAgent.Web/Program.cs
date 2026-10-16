@@ -3,6 +3,11 @@ using TradingAgent.Web.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
+var requestTimeoutSeconds = builder.Configuration.GetValue<int?>("Api:RequestTimeoutSeconds") ?? 180;
+var requestTimeout = requestTimeoutSeconds > 0
+    ? TimeSpan.FromSeconds(requestTimeoutSeconds)
+    : TimeSpan.FromSeconds(180);
+
 builder.Services.AddHttpClient<TradingAgentApiClient>((serviceProvider, client) =>
 {
     var baseUrl = builder.Configuration["Api:BaseUrl"];
@@ -13,7 +18,7 @@ builder.Services.AddHttpClient<TradingAgentApiClient>((serviceProvider, client) 
     }
 
     client.BaseAddress = new Uri(baseUrl, UriKind.Absolute);
-    client.Timeout = Timeout.InfiniteTimeSpan;
+    client.Timeout = requestTimeout;
 }).ConfigurePrimaryHttpMessageHandler(() =>
 {
     var handler = new HttpClientHandler();

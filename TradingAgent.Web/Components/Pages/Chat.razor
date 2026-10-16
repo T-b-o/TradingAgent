@@ -1,6 +1,8 @@
 @page "/chat"
+@using Microsoft.Extensions.Configuration
 @using TradingAgent.Web.Models
 @using TradingAgent.Web.Services
+@inject IConfiguration Configuration
 @inject TradingAgentApiClient ApiClient
 
 <PageTitle>AI Chat</PageTitle>
@@ -79,6 +81,9 @@
     private bool _isSending;
     private string _errorMessage = string.Empty;
     private ApiResult<AgentChatResponse>? _result;
+    private CancellationTokenSource? _requestCancellationSource;
+
+    private int RequestTimeoutSeconds => Configuration.GetValue<int?>("Api:RequestTimeoutSeconds") ?? 180;
 
     private string _placeholderHint => string.IsNullOrWhiteSpace(_message)
         ? "Enter a message to send to the local AI service."
@@ -96,14 +101,35 @@
         }
 
         _isSending = true;
+        _requestCancellationSource = new CancellationTokenSource(TimeSpan.FromSeconds(RequestTimeoutSeconds));
 
         try
         {
-            _result = await ApiClient.SendChatAsync(_message);
+            _result = await ApiClient.SendChatAsync(_message, _requestCancellationSource.Token);
+
+            if (!_result.IsSuccess)
+            {
+                _errorMessage = _result.ErrorMessage ?? "The request failed.";
+
+                if (_errorMessage.Contains("timed out", StringComparison.OrdinalIgnoreCase))
+                {
+                    _errorMessage = $"The local AI request timed out after {RequestTimeoutSeconds} seconds. Verify that Ollama is running and the model is available.";
+                }
+            }
+        }
+        catch (OperationCanceledException) when (_requestCancellationSource is not null && _requestCancellationSource.IsCancellationRequested)
+        {
+            _errorMessage = $"The local AI request timed out after {RequestTimeoutSeconds} seconds. Verify that Ollama is running and the model is available.";
+        }
+        catch (OperationCanceledException)
+        {
+            _errorMessage = "The request was cancelled before the local AI service responded.";
         }
         finally
         {
             _isSending = false;
+            _requestCancellationSource?.Dispose();
+            _requestCancellationSource = null;
         }
     }
 }
