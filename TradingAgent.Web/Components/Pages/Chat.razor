@@ -24,7 +24,7 @@
         <div class="mt-5 flex items-center justify-between gap-4">
             <div class="text-sm text-slate-500">
                 @(_isSending
-                    ? "Local model responses can take several minutes on CPU; keep this page open."
+                    ? $"The configured request timeout is {RequestTimeoutDisplay}; local model responses can take several minutes on CPU. Keep this page open."
                     : _placeholderHint)
             </div>
             <button type="button"
@@ -75,6 +75,8 @@
     private CancellationTokenSource? _requestCancellationSource;
 
     private int RequestTimeoutSeconds => ApiClient.RequestTimeoutSeconds;
+    private string RequestTimeoutDisplay =>
+        $"{RequestTimeoutSeconds} seconds ({TimeSpan.FromSeconds(RequestTimeoutSeconds).TotalMinutes:0.##} minutes)";
 
     private string _placeholderHint => string.IsNullOrWhiteSpace(_message)
         ? "Enter a message to send to the local AI service."
@@ -83,8 +85,6 @@
     public void Dispose()
     {
         _requestCancellationSource?.Cancel();
-        _requestCancellationSource?.Dispose();
-        _requestCancellationSource = null;
     }
 
     private async Task SendAsync()
@@ -98,26 +98,21 @@
         }
 
         _isSending = true;
-        _requestCancellationSource = new CancellationTokenSource(TimeSpan.FromSeconds(RequestTimeoutSeconds));
+        var cancellationSource = new CancellationTokenSource();
+        _requestCancellationSource = cancellationSource;
 
         try
         {
-            _result = await ApiClient.SendChatAsync(_message, _requestCancellationSource.Token);
+            _result = await ApiClient.SendChatAsync(_message, cancellationSource.Token);
 
             if (!_result.IsSuccess && _result.FailureKind == ApiFailureKind.Timeout)
             {
                 _result = ApiResult<AgentChatResponse>.Failure(
-                    $"The local AI request timed out after {RequestTimeoutSeconds} seconds. Verify that Ollama is running and the model is available.",
+                    $"The local AI request timed out after {RequestTimeoutDisplay}. Verify that Ollama is running and the model is available.",
                     failureKind: ApiFailureKind.Timeout);
             }
         }
-        catch (OperationCanceledException) when (_requestCancellationSource is not null && _requestCancellationSource.IsCancellationRequested)
-        {
-            _result = ApiResult<AgentChatResponse>.Failure(
-                "The request was cancelled before the local AI service responded.",
-                failureKind: ApiFailureKind.UserCancelled);
-        }
-        catch (OperationCanceledException)
+        catch (OperationCanceledException) when (cancellationSource.IsCancellationRequested)
         {
             _result = ApiResult<AgentChatResponse>.Failure(
                 "The request was cancelled before the local AI service responded.",
@@ -126,8 +121,12 @@
         finally
         {
             _isSending = false;
-            _requestCancellationSource?.Dispose();
-            _requestCancellationSource = null;
+            if (ReferenceEquals(_requestCancellationSource, cancellationSource))
+            {
+                _requestCancellationSource = null;
+            }
+
+            cancellationSource.Dispose();
         }
     }
 }
