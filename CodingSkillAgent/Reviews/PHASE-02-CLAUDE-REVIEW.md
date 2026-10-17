@@ -1,3 +1,5 @@
+> Superseded: the original CORS-driven Option A was replaced by the accepted `InteractiveServer` decision (D3). This review remains for historical context only.
+
 # Phase 02 — Architecture Decision: Web/API Hosting Model
 
 Decision: separate origins (Option A).
