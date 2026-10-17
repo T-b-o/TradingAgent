@@ -1,11 +1,11 @@
 # Phase 02 — Blazor + Browser Debugging
 
 Status:
-REMEDIATED — pending manual verification of browser/debugging checks.
+REMEDIATED — pending manual verification
 
 ## Git-Derived File Inventories
 
-### Historical Phase 02 remediation
+### Remediation commit `21562ef` only
 
 Commit `21562ef2596cdb9e54ea05f1668c58dbc9b3003e` (`Phase 02 Remediation Changes`) recorded these files:
 
@@ -30,18 +30,11 @@ Commit `21562ef2596cdb9e54ea05f1668c58dbc9b3003e` (`Phase 02 Remediation Changes
 - `TradingAgent.Web/appsettings.Development.json`
 - `TradingAgent.Web/appsettings.json`
 
-### Current final-corrections working-tree diff
+Earlier related Web/Phase 02 history is not included in that commit inventory: `1ce6e16` (Phase 02 foundation), `e2890f7` (Phase 02 completion docs), `7045ccd` (Bootstrap-to-Tailwind cleanup), and `214973b` (Phase 02 post-implementation changes). Commit `b379516` contains the subsequent Phase 02 bug corrections.
 
-The final corrections are separate from that historical commit. The inventory is captured by `git diff HEAD --name-status` in the evidence file and currently includes:
+### Remediation 3 working-tree diff
 
-- `CodingSkillAgent/Evidence/PHASE-02-REMEDIATION-2-EVIDENCE.md` (regenerated evidence artifact; its own contents are excluded from the evidence diff)
-- `CodingSkillAgent/Phases/PHASE-02.md`
-- `CodingSkillAgent/STATUS.md`
-- `TradingAgent.Tests/Web/TradingAgentApiClientTests.cs`
-- `TradingAgent.Web/Components/Pages/Chat.razor`
-- `TradingAgent.Web/wwwroot/app.css`
-
-The evidence file is tracked at HEAD and is regenerated as a modified artifact. The evidence package records the actual `git ls-files --others --exclude-standard` output and final status, including any untracked paths without staging them.
+Remediation 3 changes are separate from the historical Remediation 2 commit. Their exact tracked and untracked inventories are recorded in `CodingSkillAgent/Evidence/PHASE-02-REMEDIATION-3-EVIDENCE.md`; the evidence file itself is not recursively included in its own diff.
 
 ## Objective
 
@@ -49,7 +42,11 @@ Build the first Blazor Web App and validate the real server-side debugging flow 
 
 ## Timeout Governance
 
-The Web timeout must remain strictly above the API's `Ollama:Timeout`. The effective API timeout is `00:10:00` (600s). The Web app sets `Api:RequestTimeoutSeconds` to `660` seconds (11 minutes) in both appsettings files so the UI waits longer than the API/LLM request window. The two settings live in separate projects, and nothing enforces this automatically.
+The Web timeout must remain strictly above the API's `Ollama:Timeout`. The API timeout sources were checked: `TradingAgent.Api/appsettings.json` sets `00:10:00` (600s); `appsettings.Development.json` has no Ollama timeout override; both API launch profiles have no `Ollama__Timeout`; CMD and PowerShell Process/User/Machine environment values are empty. `dotnet user-secrets list --project TradingAgent.Api` could not run because the project has no `UserSecretsId`. Therefore the effective configured value from available sources is 600 seconds, and the Web `Api:RequestTimeoutSeconds` is 660 seconds (11 minutes), strictly greater. The two settings live in separate projects, and nothing enforces this automatically.
+
+## Template Leftovers
+
+Confirmed absent: `Counter.razor`, `Weather.razor`, `NavMenu.razor.css`, and `MainLayout.razor.css` are not tracked or present on disk under `TradingAgent.Web`; no references were found.
 
 ## Scope
 
@@ -132,7 +129,7 @@ Do NOT implement:
 9. Relevant tests pass. ✅
 10. Actual changed-file list is derived from Git. ✅
 11. Phase documentation is updated. ✅
-12. Commit/push requires explicit user approval. ✅
+12. Commit/push requires explicit user approval (process rule; not yet requested).
 
 ## Verification Summary
 

@@ -23,6 +23,9 @@ public sealed class TradingAgentApiClient
         _logger = logger ?? NullLogger<TradingAgentApiClient>.Instance;
     }
 
+    /// <summary>
+    /// Gets the configured <see cref="HttpClient.Timeout"/> in seconds, the single request timeout authority.
+    /// </summary>
     public int RequestTimeoutSeconds => (int)Math.Ceiling(_httpClient.Timeout.TotalSeconds);
 
     /// <summary>

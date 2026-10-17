@@ -29,13 +29,16 @@ Must be derived from Git.
 ## Phase 02
 
 Status:
-REMEDIATED — pending manual verification of browser/debugging checks.
+REMEDIATED — pending manual verification
 
 Objective:
 Blazor Web App + Tailwind + API integration + server-side browser debugging workflow.
 
 Major result:
 Blazor dashboard and API connection flow completed using the accepted `InteractiveServer` architecture, with the Web runtime path intentionally remaining server-side rather than CORS-driven browser fetches.
+
+Template leftovers:
+Confirmed absent: `Counter.razor`, `Weather.razor`, `NavMenu.razor.css`, and `MainLayout.razor.css`.
 
 Exact changed files:
 Must be derived from Git.
