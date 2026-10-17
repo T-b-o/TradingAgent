@@ -117,9 +117,14 @@ public sealed class TradingAgentApiClientTests
     public async Task SendChatAsync_WhenRequestTimesOut_ReturnsFailure()
     {
         using var httpClient = new HttpClient(new StubHttpMessageHandler(
-            (_, _) => throw new OperationCanceledException("The request timed out.")))
+            async (_, cancellationToken) =>
+            {
+                await Task.Delay(Timeout.InfiniteTimeSpan, cancellationToken);
+                return new HttpResponseMessage(HttpStatusCode.OK);
+            }))
         {
-            BaseAddress = new Uri("https://localhost/")
+            BaseAddress = new Uri("https://localhost/"),
+            Timeout = TimeSpan.FromMilliseconds(50)
         };
         var apiClient = new TradingAgentApiClient(httpClient);
 

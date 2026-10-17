@@ -3,27 +3,45 @@
 Status:
 REMEDIATED — pending manual verification of browser/debugging checks.
 
-Git-derived changed file list (from the project repo):
+## Git-Derived File Inventories
+
+### Historical Phase 02 remediation
+
+Commit `21562ef2596cdb9e54ea05f1668c58dbc9b3003e` (`Phase 02 Remediation Changes`) recorded these files:
+
+- `.github/Prompts/FOLLOWUP-Phase02-Remediation2-COPILOT-Implementation.prompt.md`
+- `.github/Prompts/Phase02-Copilot-Implementation.prompt.md`
 - `CodingSkillAgent/ARCHITECTURE.md`
 - `CodingSkillAgent/CHANGELOG.md`
+- `CodingSkillAgent/Evidence/PHASE-02-REMEDIATION-2-EVIDENCE.md`
 - `CodingSkillAgent/Phases/PHASE-02.md`
-- `CodingSkillAgent/Reviews/PHASE-02-CLAUDE-POST-IMPLEMENTATION-REVIEW.md`
+- `CodingSkillAgent/Reviews/PHASE-02-CLAUDE-REVIEW.md`
 - `CodingSkillAgent/STATUS.md`
-- `TradingAgent.Api/Properties/launchSettings.json`
-- `TradingAgent.Web/Properties/launchSettings.json`
-- `TradingAgent.Web/TradingAgentApiClientTests.cs`
+- `TradingAgent.Tests/Web/TradingAgentApiClientTests.cs`
 - `TradingAgent.Web/Components/App.razor`
 - `TradingAgent.Web/Components/Layout/MainLayout.razor`
-- `TradingAgent.Web/Components/Layout/ReconnectModal.razor`
 - `TradingAgent.Web/Components/Pages/Chat.razor`
 - `TradingAgent.Web/Components/Pages/Error.razor`
 - `TradingAgent.Web/Components/Pages/Home.razor`
-- `TradingAgent.Web/Components/Pages/Status.razor`
 - `TradingAgent.Web/Models/ApiModels.cs`
 - `TradingAgent.Web/Program.cs`
+- `TradingAgent.Web/Properties/launchSettings.json`
 - `TradingAgent.Web/Services/TradingAgentApiClient.cs`
 - `TradingAgent.Web/appsettings.Development.json`
 - `TradingAgent.Web/appsettings.json`
+
+### Current final-corrections working-tree diff
+
+The final corrections are separate from that historical commit. The inventory is captured by `git diff HEAD --name-status` in the evidence file and currently includes:
+
+- `CodingSkillAgent/Evidence/PHASE-02-REMEDIATION-2-EVIDENCE.md` (regenerated evidence artifact; its own contents are excluded from the evidence diff)
+- `CodingSkillAgent/Phases/PHASE-02.md`
+- `CodingSkillAgent/STATUS.md`
+- `TradingAgent.Tests/Web/TradingAgentApiClientTests.cs`
+- `TradingAgent.Web/Components/Pages/Chat.razor`
+- `TradingAgent.Web/wwwroot/app.css`
+
+The evidence file is tracked at HEAD and is regenerated as a modified artifact. The evidence package records the actual `git ls-files --others --exclude-standard` output and final status, including any untracked paths without staging them.
 
 ## Objective
 
@@ -51,9 +69,11 @@ The Web timeout must remain strictly above the API's `Ollama:Timeout`. The effec
 
 Browser
     ↓
+SignalR
+    ↓
 Blazor Server
     ↓
-HttpClient
+HTTP
     ↓
 ASP.NET Core API
     ↓
@@ -95,9 +115,9 @@ Do NOT implement:
 
 ## Acceptance Criteria
 
-1. Blazor app starts. ✅
-2. UI requests reach the existing API via the Web server. ✅
-3. API response is displayed. ✅
+1. Blazor app starts. PENDING MANUAL VERIFICATION
+2. UI requests reach the existing API via the Web server. PENDING MANUAL VERIFICATION
+3. API response is displayed. PENDING MANUAL VERIFICATION
 4. Request path is visible via Blazor/HTTP diagnostics and server-side logs. PENDING MANUAL VERIFICATION
    - [ ] Breakpoint hit in `TradingAgentApiClient` or API endpoint
    - [ ] Chrome DevTools Network shows the Blazor SignalR connection and server-side HTTP flow
@@ -120,5 +140,6 @@ Do NOT implement:
 - Web app is configured for the same API base address
 - CORS policy remains configured for validation, but the current browser UI does not exercise it directly
 - Server-side API client logs request failures with the actual exception and base-address context
-- Relevant tests pass: 11/11
+- Full solution Release build succeeds with 0 warnings and 0 errors
+- Relevant tests pass: 14/14, 0 failed and 0 skipped
 - Manual browser verification remains environment-dependent and was not claimed as completed here

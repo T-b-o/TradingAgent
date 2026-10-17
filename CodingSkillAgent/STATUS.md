@@ -2,7 +2,7 @@
 
 ## Current Phase
 
-Phase 02 remediation and verification.
+Phase 02 remediation — REMEDIATED, pending manual verification.
 
 The repository currently reflects the approved `InteractiveServer` architecture and the Web app calls the API through the server-side `TradingAgentApiClient`. The codebase has been updated to improve retry handling, timeout diagnostics, and structured error logging. Relevant build and test verification has been completed, while browser-side manual checks remain pending user confirmation.
 
@@ -23,10 +23,10 @@ The repository currently reflects the approved `InteractiveServer` architecture 
 ## Verified Results
 
 Build:
-PASS via `dotnet test` on the existing test project, which builds the solution projects.
+PASS — `dotnet build --configuration Release --nologo`; 0 warnings, 0 errors.
 
 Tests:
-PASS — 11 passed, 0 failed, 0 skipped.
+PASS — `dotnet test --configuration Release --logger "console;verbosity=normal" --nologo`; 14 passed, 0 failed, 0 skipped.
 
 Launch-profile consistency:
 CHECKED — API HTTPS profile is configured for `https://localhost:7062` and the Web app base URL is configured to the same HTTPS address. The actual current configuration is aligned.
@@ -103,6 +103,12 @@ without explicit user approval.
 
 ---
 
-## Next Action
+## Pending Manual Verification
 
-Proceed only after code review confirms the remediation is acceptable. Manual browser verification remains optional and environment-dependent.
+- [ ] Start the Blazor app and verify it renders.
+- [ ] Verify the UI request reaches the API through the Web server and displays the API response.
+- [ ] Hit a breakpoint in `TradingAgentApiClient` or the API endpoint.
+- [ ] Inspect the SignalR connection in Chrome DevTools and confirm the API call is server-side.
+- [ ] Retry with the API stopped.
+- [ ] Chat with Ollama stopped.
+- [ ] Observe and verify the reconnect dialog.
