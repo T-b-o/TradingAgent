@@ -1,6 +1,22 @@
 namespace TradingAgent.Web.Models;
 
 /// <summary>
+/// Describes the normalized category of an API failure for UI handling.
+/// </summary>
+public enum ApiFailureKind
+{
+    None,
+    HttpRequest,
+    Timeout,
+    HttpStatus,
+    MalformedResponse,
+    UnsupportedFormat,
+    Validation,
+    UserCancelled,
+    Unknown
+}
+
+/// <summary>
 /// Represents the generated status payload returned by the TradingAgent API.
 /// </summary>
 /// <param name="Application">The application name reported by the API.</param>
@@ -23,10 +39,17 @@ public sealed record AgentChatResponse(string Message, string Model);
 /// <param name="Value">The successful payload, when available.</param>
 /// <param name="ErrorMessage">The user-friendly failure message, when available.</param>
 /// <param name="StatusCode">The HTTP status code returned by the API, when available.</param>
-public sealed record ApiResult<T>(bool IsSuccess, T? Value, string? ErrorMessage, int? StatusCode)
+/// <param name="FailureKind">The normalized failure category for the UI.</param>
+public sealed record ApiResult<T>(bool IsSuccess, T? Value, string? ErrorMessage, int? StatusCode, ApiFailureKind FailureKind = ApiFailureKind.None)
 {
-    public static ApiResult<T> Success(T value) => new(true, value, null, null);
+    /// <summary>
+    /// Creates a successful API result.
+    /// </summary>
+    public static ApiResult<T> Success(T value) => new(true, value, null, null, ApiFailureKind.None);
 
-    public static ApiResult<T> Failure(string errorMessage, int? statusCode = null) =>
-        new(false, default, errorMessage, statusCode);
+    /// <summary>
+    /// Creates a failed API result.
+    /// </summary>
+    public static ApiResult<T> Failure(string errorMessage, int? statusCode = null, ApiFailureKind failureKind = ApiFailureKind.Unknown) =>
+        new(false, default, errorMessage, statusCode, failureKind);
 }

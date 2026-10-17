@@ -1,8 +1,7 @@
 @page "/chat"
-@using Microsoft.Extensions.Configuration
 @using TradingAgent.Web.Models
 @using TradingAgent.Web.Services
-@inject IConfiguration Configuration
+@implements IDisposable
 @inject TradingAgentApiClient ApiClient
 
 <PageTitle>AI Chat</PageTitle>
@@ -44,13 +43,6 @@
         </div>
     </div>
 
-    @if (!string.IsNullOrWhiteSpace(_errorMessage))
-    {
-        <div class="rounded-2xl border border-red-200 bg-red-50 p-4 text-sm text-red-800 shadow-sm">
-            @_errorMessage
-        </div>
-    }
-
     @if (_result is null)
     {
         <div class="rounded-2xl border border-dashed border-slate-300 bg-slate-50 p-8 text-sm text-slate-500">
@@ -71,7 +63,7 @@
     {
         <div class="rounded-2xl border border-slate-200 bg-white p-5 text-sm text-slate-600 shadow-sm">
             <p class="font-semibold text-slate-900">Request failed</p>
-            <p class="mt-2">@_result.ErrorMessage</p>
+            <p class="mt-2">@(_result.ErrorMessage ?? "The request failed.")</p>
         </div>
     }
 </div>
@@ -79,24 +71,29 @@
 @code {
     private string _message = string.Empty;
     private bool _isSending;
-    private string _errorMessage = string.Empty;
     private ApiResult<AgentChatResponse>? _result;
     private CancellationTokenSource? _requestCancellationSource;
 
-    private int RequestTimeoutSeconds => Configuration.GetValue<int?>("Api:RequestTimeoutSeconds") ?? 180;
+    private int RequestTimeoutSeconds => ApiClient.RequestTimeoutSeconds;
 
     private string _placeholderHint => string.IsNullOrWhiteSpace(_message)
         ? "Enter a message to send to the local AI service."
         : "Request is ready to submit.";
 
+    public void Dispose()
+    {
+        _requestCancellationSource?.Cancel();
+        _requestCancellationSource?.Dispose();
+        _requestCancellationSource = null;
+    }
+
     private async Task SendAsync()
     {
-        _errorMessage = string.Empty;
         _result = null;
 
         if (string.IsNullOrWhiteSpace(_message))
         {
-            _errorMessage = "A non-empty message is required.";
+            _result = ApiResult<AgentChatResponse>.Failure("A non-empty message is required.", failureKind: ApiFailureKind.Validation);
             return;
         }
 
@@ -107,23 +104,24 @@
         {
             _result = await ApiClient.SendChatAsync(_message, _requestCancellationSource.Token);
 
-            if (!_result.IsSuccess)
+            if (!_result.IsSuccess && _result.FailureKind == ApiFailureKind.Timeout)
             {
-                _errorMessage = _result.ErrorMessage ?? "The request failed.";
-
-                if (_errorMessage.Contains("timed out", StringComparison.OrdinalIgnoreCase))
-                {
-                    _errorMessage = $"The local AI request timed out after {RequestTimeoutSeconds} seconds. Verify that Ollama is running and the model is available.";
-                }
+                _result = ApiResult<AgentChatResponse>.Failure(
+                    $"The local AI request timed out after {RequestTimeoutSeconds} seconds. Verify that Ollama is running and the model is available.",
+                    failureKind: ApiFailureKind.Timeout);
             }
         }
         catch (OperationCanceledException) when (_requestCancellationSource is not null && _requestCancellationSource.IsCancellationRequested)
         {
-            _errorMessage = $"The local AI request timed out after {RequestTimeoutSeconds} seconds. Verify that Ollama is running and the model is available.";
+            _result = ApiResult<AgentChatResponse>.Failure(
+                "The request was cancelled before the local AI service responded.",
+                failureKind: ApiFailureKind.UserCancelled);
         }
         catch (OperationCanceledException)
         {
-            _errorMessage = "The request was cancelled before the local AI service responded.";
+            _result = ApiResult<AgentChatResponse>.Failure(
+                "The request was cancelled before the local AI service responded.",
+                failureKind: ApiFailureKind.UserCancelled);
         }
         finally
         {

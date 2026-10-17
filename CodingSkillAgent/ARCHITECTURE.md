@@ -176,6 +176,12 @@ Unknown or invalid requests must be rejected.
 
 Browser
     ↓
+SignalR
+    ↓
+Blazor Server
+    ↓
+HTTP
+    ↓
 ASP.NET Core API
     ↓
 Application
@@ -189,6 +195,8 @@ Infrastructure
 Application
     ↓
 API
+    ↓
+Blazor Server
     ↓
 Browser
 

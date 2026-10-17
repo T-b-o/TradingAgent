@@ -1,3 +1,5 @@
+> Superseded: the original CORS-driven Option A was replaced by the accepted `InteractiveServer` decision (D3). This prompt remains for historical context only.
+
 # Phase 02 — Copilot Implementation Task
 
 ## Source of Truth
