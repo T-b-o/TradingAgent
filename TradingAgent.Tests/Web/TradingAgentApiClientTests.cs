@@ -2,6 +2,7 @@ extern alias TradingAgentWeb;
 
 using System.Net;
 using TradingAgentApiClient = TradingAgentWeb::TradingAgent.Web.Services.TradingAgentApiClient;
+using ApiFailureKind = TradingAgentWeb::TradingAgent.Web.Models.ApiFailureKind;
 
 namespace TradingAgent.Tests.Web;
 
@@ -32,6 +33,48 @@ public sealed class TradingAgentApiClientTests
     }
 
     [Fact]
+    public async Task SendChatAsync_WhenApiReturns503ProblemDetails_UsesDetailAndStatusCode()
+    {
+        using var httpClient = new HttpClient(new StubHttpMessageHandler(
+            (_, _) => Task.FromResult(new HttpResponseMessage(HttpStatusCode.ServiceUnavailable)
+            {
+                Content = new StringContent("""{"detail":"Local AI service unavailable."}""")
+            })))
+        {
+            BaseAddress = new Uri("https://localhost/")
+        };
+        var apiClient = new TradingAgentApiClient(httpClient);
+
+        var result = await apiClient.SendChatAsync("Analyse EURUSD");
+
+        Assert.False(result.IsSuccess);
+        Assert.Equal("Local AI service unavailable.", result.ErrorMessage);
+        Assert.Equal((int)HttpStatusCode.ServiceUnavailable, result.StatusCode);
+        Assert.Equal(ApiFailureKind.HttpStatus, result.FailureKind);
+    }
+
+    [Fact]
+    public async Task SendChatAsync_WhenApiReturns4xxWithEmptyBody_UsesGenericStatusMessage()
+    {
+        using var httpClient = new HttpClient(new StubHttpMessageHandler(
+            (_, _) => Task.FromResult(new HttpResponseMessage(HttpStatusCode.BadRequest)
+            {
+                Content = new StringContent(string.Empty)
+            })))
+        {
+            BaseAddress = new Uri("https://localhost/")
+        };
+        var apiClient = new TradingAgentApiClient(httpClient);
+
+        var result = await apiClient.SendChatAsync("Analyse EURUSD");
+
+        Assert.False(result.IsSuccess);
+        Assert.Equal("The API returned an HTTP 400 status.", result.ErrorMessage);
+        Assert.Equal((int)HttpStatusCode.BadRequest, result.StatusCode);
+        Assert.Equal(ApiFailureKind.HttpStatus, result.FailureKind);
+    }
+
+    [Fact]
     public async Task SendChatAsync_WhenApiIsUnavailable_ReturnsFailure()
     {
         using var httpClient = new HttpClient(new StubHttpMessageHandler(
@@ -47,6 +90,27 @@ public sealed class TradingAgentApiClientTests
         Assert.Equal(
             "The TradingAgent API is unavailable. Verify the API is running and reachable.",
             result.ErrorMessage);
+        Assert.Equal(ApiFailureKind.HttpRequest, result.FailureKind);
+    }
+
+    [Fact]
+    public async Task SendChatAsync_WhenApiReturnsMalformedJson_ReturnsMalformedResponseFailure()
+    {
+        using var httpClient = new HttpClient(new StubHttpMessageHandler(
+            (_, _) => Task.FromResult(new HttpResponseMessage(HttpStatusCode.OK)
+            {
+                Content = new StringContent("{")
+            })))
+        {
+            BaseAddress = new Uri("https://localhost/")
+        };
+        var apiClient = new TradingAgentApiClient(httpClient);
+
+        var result = await apiClient.SendChatAsync("Analyse EURUSD");
+
+        Assert.False(result.IsSuccess);
+        Assert.Equal("The API returned a malformed response.", result.ErrorMessage);
+        Assert.Equal(ApiFailureKind.MalformedResponse, result.FailureKind);
     }
 
     [Fact]
@@ -63,6 +127,7 @@ public sealed class TradingAgentApiClientTests
 
         Assert.False(result.IsSuccess);
         Assert.Equal("The request to the TradingAgent API timed out.", result.ErrorMessage);
+        Assert.Equal(ApiFailureKind.Timeout, result.FailureKind);
     }
 
     [Fact]

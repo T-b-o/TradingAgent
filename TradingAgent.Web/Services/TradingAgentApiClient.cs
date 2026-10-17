@@ -14,11 +14,16 @@ public sealed class TradingAgentApiClient
     private readonly HttpClient _httpClient;
     private readonly ILogger<TradingAgentApiClient> _logger;
 
+    /// <summary>
+    /// Initializes a new instance of the API client.
+    /// </summary>
     public TradingAgentApiClient(HttpClient httpClient, ILogger<TradingAgentApiClient>? logger = null)
     {
         _httpClient = httpClient;
         _logger = logger ?? NullLogger<TradingAgentApiClient>.Instance;
     }
+
+    public int RequestTimeoutSeconds => (int)Math.Ceiling(_httpClient.Timeout.TotalSeconds);
 
     /// <summary>
     /// Queries the API health endpoint and normalizes connectivity and HTTP errors.
@@ -43,7 +48,7 @@ public sealed class TradingAgentApiClient
     {
         if (string.IsNullOrWhiteSpace(message))
         {
-            return ApiResult<AgentChatResponse>.Failure("A non-empty message is required.");
+            return ApiResult<AgentChatResponse>.Failure("A non-empty message is required.", failureKind: ApiFailureKind.Validation);
         }
 
         var payload = new { message };
@@ -72,7 +77,9 @@ public sealed class TradingAgentApiClient
                 _httpClient.BaseAddress,
                 exception.HttpRequestError);
 
-            return ApiResult<T>.Failure("The TradingAgent API is unavailable. Verify the API is running and reachable.");
+            return ApiResult<T>.Failure(
+                "The TradingAgent API is unavailable. Verify the API is running and reachable.",
+                failureKind: ApiFailureKind.HttpRequest);
         }
         catch (OperationCanceledException exception) when (!cancellationToken.IsCancellationRequested)
         {
@@ -82,7 +89,9 @@ public sealed class TradingAgentApiClient
                 operationName,
                 _httpClient.BaseAddress);
 
-            return ApiResult<T>.Failure("The request to the TradingAgent API timed out.");
+            return ApiResult<T>.Failure(
+                "The request to the TradingAgent API timed out.",
+                failureKind: ApiFailureKind.Timeout);
         }
         catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested)
         {
@@ -99,21 +108,21 @@ public sealed class TradingAgentApiClient
                 var content = await response.Content.ReadFromJsonAsync<T>(cancellationToken: cancellationToken);
 
                 return content is null
-                    ? ApiResult<T>.Failure("The API returned an empty response.")
+                    ? ApiResult<T>.Failure("The API returned an empty response.", failureKind: ApiFailureKind.HttpStatus)
                     : ApiResult<T>.Success(content);
             }
             catch (NotSupportedException)
             {
-                return ApiResult<T>.Failure("The API returned an unsupported payload format.");
+                return ApiResult<T>.Failure("The API returned an unsupported payload format.", failureKind: ApiFailureKind.UnsupportedFormat);
             }
             catch (JsonException)
             {
-                return ApiResult<T>.Failure("The API returned a malformed response.");
+                return ApiResult<T>.Failure("The API returned a malformed response.", failureKind: ApiFailureKind.MalformedResponse);
             }
         }
 
         var reason = await ReadProblemMessageAsync(response, cancellationToken);
-        return ApiResult<T>.Failure(reason, (int)response.StatusCode);
+        return ApiResult<T>.Failure(reason, (int)response.StatusCode, ApiFailureKind.HttpStatus);
     }
 
     private static async Task<string> ReadProblemMessageAsync(HttpResponseMessage response, CancellationToken cancellationToken)

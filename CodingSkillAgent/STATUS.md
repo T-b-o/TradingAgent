@@ -4,7 +4,7 @@
 
 Phase 02 remediation and verification.
 
-The repository currently reflects the approved `InteractiveServer` architecture and the Web app calls the API through the server-side `TradingAgentApiClient`. The codebase has been updated to improve retry handling, timeout diagnostics, and structured error logging, and the relevant tests pass.
+The repository currently reflects the approved `InteractiveServer` architecture and the Web app calls the API through the server-side `TradingAgentApiClient`. The codebase has been updated to improve retry handling, timeout diagnostics, and structured error logging. Relevant build and test verification has been completed, while browser-side manual checks remain pending user confirmation.
 
 ---
 

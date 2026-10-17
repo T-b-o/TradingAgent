@@ -29,13 +29,13 @@ Must be derived from Git.
 ## Phase 02
 
 Status:
-COMPLETE
+REMEDIATED — pending manual verification of browser/debugging checks.
 
 Objective:
-Blazor Web App + Tailwind + API integration + browser debugging.
+Blazor Web App + Tailwind + API integration + server-side browser debugging workflow.
 
 Major result:
-Blazor dashboard and API connection flow completed with configured CORS and browser debugging workflow.
+Blazor dashboard and API connection flow completed using the accepted `InteractiveServer` architecture, with the Web runtime path intentionally remaining server-side rather than CORS-driven browser fetches.
 
 Exact changed files:
 Must be derived from Git.
