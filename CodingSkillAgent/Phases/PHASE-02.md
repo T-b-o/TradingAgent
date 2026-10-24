@@ -1,7 +1,7 @@
 # Phase 02 — Blazor + Browser Debugging
 
 Status:
-REMEDIATED — pending manual verification
+ACCEPTED — 24 October 2026
 
 ## Git-Derived File Inventories
 
@@ -112,19 +112,19 @@ Do NOT implement:
 
 ## Acceptance Criteria
 
-1. Blazor app starts. PENDING MANUAL VERIFICATION
-2. UI requests reach the existing API via the Web server. PENDING MANUAL VERIFICATION
-3. API response is displayed. PENDING MANUAL VERIFICATION
-4. Request path is visible via Blazor/HTTP diagnostics and server-side logs. PENDING MANUAL VERIFICATION
-   - [ ] Breakpoint hit in `TradingAgentApiClient` or API endpoint
-   - [ ] Chrome DevTools Network shows the Blazor SignalR connection and server-side HTTP flow
-   - [ ] Output window or server logs confirm the request path
-5. Visual Studio breakpoint is hit. PENDING MANUAL VERIFICATION
-6. Request can be traced end-to-end. PENDING MANUAL VERIFICATION
-7. Error behaviour can be demonstrated and debugged. PENDING MANUAL VERIFICATION
-   - [ ] Retry with API stopped
-   - [ ] Chat with Ollama stopped
-   - [ ] Reconnect dialog observed
+1. Blazor app starts. ✅ User-verified on 24 October 2026.
+2. UI requests reach the existing API via the Web server. ✅ User-verified on 24 October 2026.
+3. API response is displayed. ✅ User-verified on 24 October 2026.
+4. Request path is visible via Blazor/HTTP diagnostics and server-side logs. ✅ User-verified on 24 October 2026.
+   - [x] Breakpoint hit in `TradingAgentApiClient` or API endpoint.
+   - [x] Chrome DevTools Network showed the `_blazor` SignalR connection; no browser-side `/api/*` request is expected in the accepted `InteractiveServer` design.
+   - [x] Web/API request-path diagnostics were observed through breakpoints.
+5. Visual Studio breakpoint is hit. ✅ User-verified on 24 October 2026.
+6. Request can be traced end-to-end. ✅ User-verified on 24 October 2026.
+7. Error behaviour can be demonstrated and debugged. ✅ User-verified on 24 October 2026.
+   - [x] Retry with API stopped, followed by recovery after restart.
+   - [x] Chat with Ollama stopped, followed by recovery after restart.
+   - [x] Styled reconnect dialog observed after stopping only `TradingAgent.Web`.
 8. Build succeeds. ✅
 9. Relevant tests pass. ✅
 10. Actual changed-file list is derived from Git. ✅
@@ -137,6 +137,10 @@ Do NOT implement:
 - Web app is configured for the same API base address
 - CORS policy remains configured for validation, but the current browser UI does not exercise it directly
 - Server-side API client logs request failures with the actual exception and base-address context
-- Full solution Release build succeeds with 0 warnings and 0 errors
-- Relevant tests pass: 14/14, 0 failed and 0 skipped
-- Manual browser verification remains environment-dependent and was not claimed as completed here
+- Fresh 24 October 2026 solution Release build succeeded with 0 warnings and 0 errors.
+- Fresh 24 October 2026 automated test run passed: 14/14, 0 failed and 0 skipped.
+- All required manual browser checks were completed on 24 October 2026, including the styled reconnect dialog.
+
+## Formal Acceptance
+
+The user formally accepted Phase 02 on 24 October 2026 after the implementation, fresh automated verification, and required manual browser checks were complete. Phase 03 remains out of scope until separately authorised.

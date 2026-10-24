@@ -22,7 +22,7 @@ The current approved baseline is:
 - Runtime: .NET 10
 - Backend: ASP.NET Core 10
 - UI: Blazor Web App
-- CSS: Tailwind CSS (including its existing `postcss` and `autoprefixer`        build dependencies, declared in `TradingAgent.Web/package.json` and with resolved versions locked in `TradingAgent.Web/package-lock.json`).
+- CSS: Tailwind CSS (including its existing `postcss` and `autoprefixer` build dependencies, declared in `TradingAgent.Web/package.json` and with resolved versions locked in `TradingAgent.Web/package-lock.json`).
 - API: ASP.NET Core APIs + OpenAPI
 - LLM runtime: Ollama
 - Testing: xUnit

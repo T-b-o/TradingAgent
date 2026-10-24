@@ -2,9 +2,9 @@
 
 ## Current Phase
 
-REMEDIATED — pending manual verification.
+PHASE 02 — ACCEPTED on 24 October 2026.
 
-The repository currently reflects the approved `InteractiveServer` architecture and the Web app calls the API through the server-side `TradingAgentApiClient`. The codebase has been updated to improve retry handling, timeout diagnostics, and structured error logging. Relevant build and test verification has been completed, while browser-side manual checks remain pending user confirmation.
+The repository reflects the approved `InteractiveServer` architecture: the Web app calls the API through the server-side `TradingAgentApiClient`. Phase 02 implementation, automated verification, and the required browser/manual checks are complete. The user formally accepted Phase 02 on 24 October 2026. Phase 03 must not begin until separately authorised.
 
 ---
 
@@ -23,10 +23,10 @@ The repository currently reflects the approved `InteractiveServer` architecture 
 ## Verified Results
 
 Build:
-PASS — `dotnet build --configuration Release --nologo`; 0 warnings, 0 errors.
+PASS — fresh 24 October 2026 Release build of `TradingAgent.slnx`; 0 warnings, 0 errors.
 
 Tests:
-PASS — `dotnet test --configuration Release --logger "console;verbosity=normal" --nologo`; 14 passed, 0 failed, 0 skipped.
+PASS — fresh 24 October 2026 Release test run of `TradingAgent.slnx`; 14 passed, 0 failed, 0 skipped.
 
 Launch-profile consistency:
 CHECKED — API HTTPS profile is configured for `https://localhost:7062` and the Web app base URL is configured to the same HTTPS address. The actual current configuration is aligned.
@@ -103,12 +103,17 @@ without explicit user approval.
 
 ---
 
-## Pending Manual Verification
+## Completed Manual Verification
 
-- [ ] Start the Blazor app and verify it renders.
-- [ ] Verify the UI request reaches the API through the Web server and displays the API response.
-- [ ] Hit a breakpoint in `TradingAgentApiClient` or the API endpoint.
-- [ ] Inspect the SignalR connection in Chrome DevTools and confirm the API call is server-side.
-- [ ] Retry with the API stopped.
-- [ ] Chat with Ollama stopped.
-- [ ] Observe and verify the reconnect dialog.
+- [x] The Blazor app rendered and was interactive.
+- [x] The UI reached the API through the Web server and displayed API responses.
+- [x] Breakpoints in the Web/API request path were hit.
+- [x] Chrome DevTools showed the `_blazor` SignalR WebSocket and no browser-side `/api/*` Fetch/XHR traffic, as expected for `InteractiveServer`.
+- [x] With the API stopped, the UI reported Unavailable and recovered after Retry when the API restarted.
+- [x] With Ollama stopped, chat showed the safe local-AI failure; it succeeded again after Ollama restarted.
+- [x] The in-flight chat empty state cleared while the request was pending, and the 660-second timeout hint displayed.
+- [x] With only `TradingAgent.Web` stopped, the existing browser tab displayed the styled “Rejoining the server...” dialog.
+
+## Next Gate
+
+Phase 02 is accepted. Phase 03 planning or implementation requires separate user authorisation and a current cross-AI handoff before work begins.

@@ -19,6 +19,16 @@ ChatGPT must maintain continuity between phases and prevent gaps between AI hand
 
 The actual repository is the implementation source of truth.
 
+Start every task by reading:
+
+- `CodingSkillAgent/AI-WORKFLOW.md`
+- `CodingSkillAgent/CURRENT-HANDOFF.md`
+
+The current handoff identifies the active task, its owner, the authorised
+scope, and the next required decision. Update it after any material decision,
+implementation result, review, acceptance result, or user approval. Do not use
+a conversation transcript as the only handover record.
+
 The following files define project intent and workflow:
 
 - `CodingSkillAgent/PROJECT_CONTEXT.md`
@@ -352,6 +362,8 @@ Before starting any Copilot implementation, ChatGPT must verify that:
 4. The Copilot prompt reflects the latest approved decisions.
 5. No unresolved architectural decision is being silently passed to Copilot.
 6. No unapproved technology change is being silently passed to Copilot.
+7. `CURRENT-HANDOFF.md` names the exact approved Copilot prompt and identifies
+   Copilot as the current owner.
 
 If any condition is false, stop the handoff and resolve it first.
 
