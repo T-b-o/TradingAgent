@@ -3,6 +3,8 @@
 This is a professional local AI Forex Trading Agent.
 
 Read the current project documentation under:
+- CodingSkillAgent/AI-WORKFLOW.md
+- CodingSkillAgent/CURRENT-HANDOFF.md
 - CodingSkillAgent/PROJECT_CONTEXT.md
 - CodingSkillAgent/ARCHITECTURE.md
 - CodingSkillAgent/TECHNOLOGY-POLICY.md
@@ -90,15 +92,17 @@ Do not add paid LLM APIs.
 
 Before changing code:
 1. inspect current implementation
-2. read the latest ChatGPT-approved Copilot development prompt under `.github/Prompts/`
-3. understand the approved phase, bug fix, improvement, or follow-up scope
-4. make the smallest correct change
-5. build
-6. run relevant tests
-7. report actual results
+2. read `CodingSkillAgent/CURRENT-HANDOFF.md` to identify the active authorised task
+3. read the latest ChatGPT-approved Copilot development prompt identified by that handoff under `.github/Prompts/`
+4. understand the approved phase, bug fix, improvement, or follow-up scope
+5. make the smallest correct change
+6. build
+7. run relevant tests
+8. report actual results
 
-If no ChatGPT-approved Copilot development prompt exists for the requested code
-change, stop and ask for one before implementation.
+If the handoff says no implementation task is authorised, or if no
+ChatGPT-approved Copilot development prompt is identified for the requested
+code change, stop and ask ChatGPT/the user for the next authorised handoff.
 
 ## Debugging
 
