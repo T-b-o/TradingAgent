@@ -174,6 +174,13 @@ CodingSkillAgent is the source of truth for:
 - cost policy
 - model policy
 
+The current cross-AI entry point and live state are:
+
+- `CodingSkillAgent/AI-WORKFLOW.md`
+- `CodingSkillAgent/CURRENT-HANDOFF.md`
+
+Every assistant must read both before performing review, planning, implementation, or acceptance work. They replace conversational memory as the handover mechanism, but do not override the repository, technology policy, or explicit user decisions.
+
 Never rely on an AI conversation as the only project record.
 
 Technology governance is defined in:

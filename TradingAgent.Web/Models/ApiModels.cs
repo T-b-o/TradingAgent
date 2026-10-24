@@ -5,14 +5,23 @@ namespace TradingAgent.Web.Models;
 /// </summary>
 public enum ApiFailureKind
 {
+    /// <summary>No failure occurred.</summary>
     None,
+    /// <summary>The API could not be reached due to a request error.</summary>
     HttpRequest,
+    /// <summary>The HTTP client request exceeded its configured timeout.</summary>
     Timeout,
+    /// <summary>The API returned an HTTP error status or an empty payload.</summary>
     HttpStatus,
+    /// <summary>The API returned a successful response with malformed JSON.</summary>
     MalformedResponse,
+    /// <summary>The API returned a successful response in an unsupported format.</summary>
     UnsupportedFormat,
+    /// <summary>The request failed local input validation before sending.</summary>
     Validation,
+    /// <summary>The caller cancelled the in-flight request.</summary>
     UserCancelled,
+    /// <summary>The failure does not match a more specific category.</summary>
     Unknown
 }
 
