@@ -104,6 +104,10 @@ If the handoff says no implementation task is authorised, or if no
 ChatGPT-approved Copilot development prompt is identified for the requested
 code change, stop and ask ChatGPT/the user for the next authorised handoff.
 
+The Phase 03 Copilot handoff marked `DRAFT — NOT AUTHORISED FOR EXECUTION` is
+not a current implementation prompt. Phase planning, reviews, and technology
+comparisons never authorise implementation.
+
 ## Debugging
 
 For web issues trace:

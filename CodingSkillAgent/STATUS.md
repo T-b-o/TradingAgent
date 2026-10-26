@@ -2,9 +2,12 @@
 
 ## Current Phase
 
-PHASE 02 — ACCEPTED on 24 October 2026.
+PHASE 03 — Documentation prepared; awaiting Claude technical review.
 
-The repository reflects the approved `InteractiveServer` architecture: the Web app calls the API through the server-side `TradingAgentApiClient`. Phase 02 implementation, automated verification, and the required browser/manual checks are complete. The user formally accepted Phase 02 on 24 October 2026. Phase 03 must not begin until separately authorised.
+Phase 02 remains accepted (24 October 2026). The repository reflects the
+approved `InteractiveServer` architecture: the Web app calls the API through
+the server-side `TradingAgentApiClient`. Phase 03 has documentation only; no
+Phase 03 code, dependency, or configuration change is authorised.
 
 ---
 
@@ -58,6 +61,8 @@ CONFIRMED — the active UI path uses `InteractiveServer` and the browser does n
 - broker integration
 - paper trading
 - live trading
+- agent runtime/tool registry foundation
+- persistent memory, versioned trading knowledge, and evidence engine
 
 ---
 
@@ -116,4 +121,6 @@ without explicit user approval.
 
 ## Next Gate
 
-Phase 02 is accepted. Phase 03 planning or implementation requires separate user authorisation and a current cross-AI handoff before work begins.
+Claude must perform the read-only review named in `CURRENT-HANDOFF.md`. The
+owner must then decide unresolved architecture and technology questions before
+any ChatGPT-approved Copilot implementation prompt can be created.

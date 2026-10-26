@@ -10,6 +10,7 @@ Use for:
 - smoke tests
 - tool-calling tests
 - early development
+- Phase 03 bounded-context investigation
 
 ### Next Benchmark
 
@@ -75,3 +76,9 @@ Check the model selector in Visual Studio.
 Use the smallest model that reliably completes the task.
 
 Do not choose a larger model simply because it is available.
+
+## Phase 03 Context Rule
+
+Before increasing model size or assuming a context window, inspect and record
+the effective Ollama `num_ctx` behaviour on the development PC. Keep retrieved
+context bounded; context findings do not authorise a model change.

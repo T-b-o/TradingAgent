@@ -131,3 +131,10 @@ when a new technology is proposed.
   architecture-changing technology without the documented approval process.
 - No assistant may commit, push, merge, or release without explicit user
   approval.
+
+## Phase 03 Review Gate
+
+For Phase 03, the initial action is Claude's read-only technical architecture
+review. A draft Copilot handoff is not implementation authorisation. Before any
+Phase 03 code change, ChatGPT must reconcile Claude's findings and the owner
+must explicitly approve each applicable architecture or technology decision.

@@ -48,3 +48,29 @@ Confirmed absent: `Counter.razor`, `Weather.razor`, `NavMenu.razor.css`, and `Ma
 
 Exact changed files:
 Must be derived from Git.
+
+---
+
+## Phase 03
+
+Status:
+DOCUMENTATION PREPARED — AWAITING CLAUDE TECHNICAL REVIEW
+
+Recorded direction:
+Adaptive Trading Assistant foundation: C# owns orchestration, memory, tools,
+learning records, risk enforcement, and authoritative statistics; local Ollama
+with `qwen3:1.7b` remains the inference runtime. No autonomous trading,
+automatic strategy/skill modification, model retraining, or unapproved
+technology is permitted.
+
+Deferred decisions:
+SQLite versus JSON persistence; Semantic Kernel versus existing C# orchestration;
+embeddings/vector databases; Blazor PWA; and TradingView Lightweight Charts.
+Claude review and explicit owner approval are required before implementation.
+
+Historical note:
+Earlier ownership references that gave Hermes a Phase 03 role are superseded.
+Hermes is deferred and has no Phase 03 implementation, model, or runtime role.
+
+Exact changed files:
+Must be derived from Git.
