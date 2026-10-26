@@ -145,6 +145,13 @@ C#:
 - performs deterministic calculations
 - enforces risk controls
 - enforces approval gates
+- owns bounded context assembly, memory records, knowledge versions, evidence
+  validation, and authoritative statistics
+
+Future agent context is deterministically retrieved by strategy ID, symbol,
+tags, date, and market conditions. Embeddings and vector databases are not
+approved or assumed. Prompt context must remain bounded by an investigated
+Ollama context budget.
 
 ---
 
@@ -169,6 +176,26 @@ Tool Result
 LLM
 
 Unknown or invalid requests must be rejected.
+
+## Adaptive Knowledge and Evidence Boundary
+
+The long-term knowledge flow is:
+
+User teaching / `strategy.md`
+    ↓
+AI-proposed structured rules
+    ↓
+C# validation and provenance capture
+    ↓
+Human review and approval
+    ↓
+Versioned approved knowledge
+
+Evidence records must link outcomes to exact strategy versions and retain both
+supporting and contradictory evidence. C# calculates sample sizes and all
+statistics. The LLM may explain C#-supplied evidence but must not invent
+performance figures or confidence percentages. No hypothesis may be promoted
+to approved knowledge automatically.
 
 ---
 
@@ -226,6 +253,11 @@ future technologies are not automatically approved by being named here. They
 must pass through the Technology Change Gate before implementation unless an
 existing project document has explicitly approved the specific technology and
 scope.
+
+SQLite, JSON persistence, Semantic Kernel, Blazor PWA, TradingView Lightweight
+Charts, embeddings, and vector databases are not selected or approved merely
+by being discussed. Each remains subject to the Technology Change Gate where
+applicable and explicit owner approval.
 
 ---
 

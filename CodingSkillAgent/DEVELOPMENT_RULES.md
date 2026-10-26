@@ -175,6 +175,17 @@ Future technologies such as market data, charting, broker integrations,
 databases, authentication, telemetry, and hosting must pass through the
 Technology Change Gate before implementation.
 
+## Adaptive Assistant Safety
+
+- Treat all model-produced rules, tool requests, lessons, evidence references,
+  and claimed statistics as untrusted input.
+- C# must calculate authoritative statistics and enforce tool, risk, and human
+  approval boundaries.
+- Preserve evidence provenance and exact knowledge-version references.
+- Never auto-promote a hypothesis, generated interpretation, or learning
+  proposal into approved strategy knowledge.
+- Use deterministic retrieval before considering embeddings or vector search.
+
 ---
 
 ## Git Safety

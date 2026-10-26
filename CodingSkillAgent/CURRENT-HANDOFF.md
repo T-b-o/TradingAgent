@@ -1,6 +1,10 @@
 # TradingAgent — Current AI Handoff
 
-**Last reconciled:** 24 October 2026
+**Last reconciled:** 26 October 2026
+
+> This record supersedes its earlier Phase 02 waiting state. Phase 02 remains
+> accepted as historical evidence; this handoff governs the Phase 03
+> documentation/review gate below.
 
 ## Use This File First
 
@@ -10,9 +14,10 @@ state before making claims about source, commits, dependencies, or verification.
 
 ## Current State
 
-- **Active phase:** Phase 02 — Blazor + Browser Debugging.
-- **Phase status:** Accepted by the user on 24 October 2026.
-- **Next phase:** Phase 03 is not authorised; planning or implementation needs separate user authorisation.
+- **Active phase:** Phase 03 — Adaptive Trading Assistant Foundation.
+- **Phase status:** Documentation prepared; awaiting Claude technical review.
+- **Previous phase:** Phase 02 was accepted by the user on 24 October 2026.
+- **Next phase action:** Claude's read-only Phase 03 technical architecture review; Copilot implementation is not authorised.
 - **Current implementation commit:** `c680595` — `Final Phase 02 changes.`
 - **Runtime architecture:** Browser → SignalR → `TradingAgent.Web`
   (`InteractiveServer`) → server-side HTTP → `TradingAgent.Api` →
@@ -21,6 +26,9 @@ state before making claims about source, commits, dependencies, or verification.
   Tailwind CSS, xUnit, OpenAPI/Scalar, and local Ollama. See
   `TECHNOLOGY-POLICY.md` for authority.
 - **No application code change is currently authorised.**
+- **Verified Phase 03 source baseline:** `IOllamaService` supports a single
+  chat turn. No tool registry, persistent memory, strategy knowledge, or
+  evidence engine is present.
 
 ## Verified Phase 02 Evidence
 
@@ -35,30 +43,50 @@ state before making claims about source, commits, dependencies, or verification.
 - In the accepted `InteractiveServer` design, Chrome shows the `_blazor`
   WebSocket. Browser-side `/api/*` Fetch/XHR requests are not expected.
 
+## Phase 03 Direction and Constraints
+
+- C# owns orchestration, memory, skills, tools, learning records, deterministic
+  statistics, validation, risk enforcement, and approval gates; Ollama output
+  is untrusted local inference.
+- The long-term product direction is an Adaptive Trading Assistant that
+  accumulates approved knowledge and evidence, not continuous model retraining.
+- `qwen3:1.7b` and local Ollama remain in place under the $0/R0-first policy.
+- Manual approval remains mandatory. No autonomous, paper, or live trading;
+  no automatic strategy, skill, or risk modification.
+- SQLite versus JSON persistence and Semantic Kernel versus existing C#
+  orchestration are unresolved pending Claude review and owner approval.
+- Embeddings/vector databases, Blazor PWA, and TradingView Lightweight Charts
+  are not approved or assumed.
+- Hermes is deferred; earlier Hermes ownership decisions are superseded.
+
 ## Documentation and Governance State
 
 - The Tailwind policy wording was explicitly approved by the user: versions
   are declared with caret ranges in `package.json` and exact resolutions are
   locked in `package-lock.json`.
-- `STATUS.md`, `Phases/PHASE-02.md`, and `CHANGELOG.md` now record completed
-  Phase 02 verification but do not claim final acceptance.
+- `STATUS.md`, `Phases/PHASE-02.md`, and `CHANGELOG.md` record Phase 02
+  verification and user acceptance.
 - `TRADING-AGENT-PROJECT-SOURCE-DETAILS.md` is the detailed historical
-  handover. It is currently untracked and must be deliberately included or
-  excluded when the documentation work is committed.
-- This handoff and `AI-WORKFLOW.md` are new documentation-only workflow
-  records and must be reviewed before any commit.
+  handover. It is historical context only; this file and `AI-WORKFLOW.md`
+  govern the current cross-AI task.
+- Phase 03 scope is in `Phases/PHASE-03.md`; the Claude review handoff is
+  `Prompts/Phase03-Claude-Technical-Architecture-Review.prompt.md`; the
+  Copilot draft is `.github/Prompts/Phase03-Copilot-Implementation-DRAFT.prompt.md`.
 
 ## Active Task
 
-**Owner:** User and ChatGPT.
+**Owner:** Claude Desktop (review), followed by ChatGPT and the user.
 
-**Task:** Preserve the accepted Phase 02 record and wait for a separately authorised Phase 03 request.
+**Task:** Conduct the Phase 03 read-only technical architecture review named in
+`CodingSkillAgent/Prompts/Phase03-Claude-Technical-Architecture-Review.prompt.md`.
 
-**Authorised work:** No new implementation work is authorised. No code,
-package, configuration, dependency, architecture, or Phase 03 change is
-authorised.
+**Authorised work:** Repository inspection and documentation review only. No
+code, test, package, configuration, dependency, persistence, runtime, model,
+or architecture implementation change is authorised.
 
-**Recorded user decision:** Phase 02 was formally accepted on 24 October 2026.
+**Recorded user decision:** Phase 02 was formally accepted on 24 October 2026;
+Phase 03 documentation preparation is authorised, while implementation awaits
+Claude review and owner decisions.
 
 ## Role-Specific Instructions
 
@@ -73,8 +101,9 @@ Read:
 - `TECHNOLOGY-POLICY.md`
 - current Git status and the latest evidence/review relevant to the decision
 
-Do not start Phase 03. If the user authorises Phase 03 planning, create a new
-handoff task and obtain the required review before implementation. Before any
+Do not implement Phase 03. Reconcile Claude's review with repository evidence,
+record decisions, and obtain owner approval before authoring an authorised
+Copilot task. Before any
 commit or push, show changed files, build/tests, a proposed message, and ask
 exactly: “Do you approve the commit and push?”
 
@@ -89,9 +118,9 @@ Read:
 - `TECHNOLOGY-POLICY.md`
 - the latest Phase 02 evidence and relevant review files
 
-Treat Phase 02 as accepted. If asked to review the phase, identify only a
-material defect that could invalidate acceptance. Do not recommend Phase 03
-implementation or change source code without a new authorised handoff.
+Treat Phase 02 as accepted. Review Phase 03 according to the named technical
+review handoff. Do not implement, select a technology, or create Copilot work
+scope.
 
 ### GitHub Copilot
 
@@ -101,12 +130,12 @@ Read:
 - this handoff
 - `.github/copilot-instructions.md`
 
-There is no authorised Copilot implementation task. Do not edit application
-code, configuration, dependencies, or tests. If asked to implement anything,
-stop and request a current ChatGPT-approved prompt named in this handoff.
+The Phase 03 Copilot prompt is a **DRAFT — NOT AUTHORISED FOR EXECUTION**.
+Do not edit application code, configuration, dependencies, tests, or Phase 03
+documentation. Request a replacement ChatGPT-approved prompt named here.
 
 ## Next Handoff Update
 
-When the user authorises Phase 03 planning or implementation, ChatGPT must
-update this file with the exact request, owner, authorised scope, required
-review path, and—before code changes—the exact Copilot task-prompt path.
+After Claude's review, ChatGPT must record its decision and the owner must
+approve relevant technology/architecture choices. Only then may this file name
+an authorised Copilot prompt for a narrowly scoped first implementation task.
