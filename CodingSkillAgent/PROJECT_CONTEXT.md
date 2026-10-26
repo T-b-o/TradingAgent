@@ -2,7 +2,8 @@
 
 ## Purpose
 
-Build a professional local AI Forex Trading Agent.
+Build a professional local AI Forex Trading Agent that will evolve into an
+Adaptive Trading Assistant.
 
 The system exists to:
 - perform AI-assisted market analysis
@@ -230,12 +231,15 @@ The AI should:
 - compare scenarios
 - explain its analysis
 - propose strategy/skill improvements
+- propose structured interpretations of user-supplied strategy teaching
+- draft evidence-backed lessons for human review
 
 The AI must not:
 - silently modify strategy knowledge
 - independently change risk limits
 - directly execute live trades
 - bypass C# validation
+- invent performance statistics, confidence figures, or evidence
 
 ---
 
@@ -250,6 +254,8 @@ C# controls:
 - approval gates
 - audit logging
 - external integrations
+- persistent-memory and knowledge-record validation
+- authoritative evidence statistics and provenance checks
 
 ---
 
@@ -299,3 +305,16 @@ Use the LLM for:
 - contextual reasoning
 - orchestration
 - scenario analysis
+
+## Adaptive Trading Assistant Direction
+
+The long-term architecture is: Strategy Knowledge + Trade Journal + Market
+Data + Agent Memory + Evidence Engine + AI Reasoning = Adaptive Trading
+Assistant. The aim is accumulated approved knowledge and experience, not
+continuous model retraining.
+
+Strategy teaching may combine user conversation and `strategy.md` source files.
+AI may produce a proposed structured rule interpretation; the user must review
+and approve it. Approved knowledge is versioned, and prior versions plus the
+reason for each change remain traceable. Observations, hypotheses, verified
+outcomes, and approved knowledge must remain distinct.

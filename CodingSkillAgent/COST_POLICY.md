@@ -36,6 +36,11 @@ Prefer:
 All new technologies, including free and open-source dependencies, must also
 follow `CodingSkillAgent/TECHNOLOGY-POLICY.md`.
 
+Phase 03 keeps `qwen3:1.7b` through local Ollama. Persistence, orchestration,
+retrieval, and evidence capabilities must first prefer existing .NET facilities
+and deterministic retrieval; no paid runtime, embedding API, or hosted vector
+service may be introduced.
+
 ---
 
 ## Skills

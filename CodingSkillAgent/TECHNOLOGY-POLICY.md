@@ -134,6 +134,15 @@ Do not silently add:
 Free or open-source technologies still require approval when they are new to the
 approved stack.
 
+## Deferred Phase 03 Technology Decisions
+
+SQLite versus JSON persistence must be compared and explicitly selected by the
+owner before implementation. Semantic Kernel must be compared against the
+existing C# orchestration before any adoption decision. Embeddings, vector
+databases, Blazor PWA, and TradingView Lightweight Charts are not approved.
+Discussion, documentation, or a Claude recommendation does not approve any of
+these technologies.
+
 ---
 
 ## Agent Responsibilities
