@@ -1,6 +1,6 @@
 # TradingAgent — Current AI Handoff
 
-**Last reconciled:** 26 October 2026
+**Last reconciled:** 13 November 2026
 
 > This record supersedes its earlier Phase 02 waiting state. Phase 02 remains
 > accepted as historical evidence; this handoff governs the Phase 03
@@ -15,10 +15,10 @@ state before making claims about source, commits, dependencies, or verification.
 ## Current State
 
 - **Active phase:** Phase 03 — Adaptive Trading Assistant Foundation.
-- **Phase status:** Documentation prepared; awaiting Claude technical review.
+- **Phase status:** Owner decisions recorded; documentation reconciliation in progress; implementation remains unauthorised.
 - **Previous phase:** Phase 02 was accepted by the user on 24 October 2026.
-- **Next phase action:** Claude's read-only Phase 03 technical architecture review; Copilot implementation is not authorised.
-- **Current implementation commit:** `c680595` — `Final Phase 02 changes.`
+- **Next phase action:** Reconcile Phase 03 documentation, record the approved owner decisions, and prepare the next narrowly scoped implementation prompt only after explicit owner review.
+- **Current implementation baseline:** repository HEAD is `d65c984` (`Chat GPT Skill update`) in the live workspace; the owner-supplied baseline `83be25d` was not verified as checked out here and is not treated as the live source of truth.
 - **Runtime architecture:** Browser → SignalR → `TradingAgent.Web`
   (`InteractiveServer`) → server-side HTTP → `TradingAgent.Api` →
   Application/Infrastructure → local Ollama.
@@ -29,6 +29,14 @@ state before making claims about source, commits, dependencies, or verification.
 - **Verified Phase 03 source baseline:** `IOllamaService` supports a single
   chat turn. No tool registry, persistent memory, strategy knowledge, or
   evidence engine is present.
+
+## Approved Phase 03 Owner Decisions
+
+- **D1 — Persistence:** JSON using BCL `System.Text.Json` is the selected Phase 03 persistence approach for the approved scope. SQLite remains unapproved.
+- **D2 — Orchestration:** the existing C# orchestration remains the selected model. Semantic Kernel is deferred and not approved for this phase.
+- **D3 — P03.4 architecture:** the P03.4 work is split into `P03.4a` (contracts first) and `P03.4b` (JSON implementation), both unauthorised until specific Copilot prompts are approved.
+- **D4 — Orchestrator skill maintenance:** the ChatGPT TradingAgent Orchestrator skill may be updated to reflect the accepted JSON/C# orchestration decisions and the Phase 03 review gate.
+- **D5 — Ollama adapter extension:** additive Ollama adapter work is permitted only within separately authorised implementation scope; it does not change the `IOllamaService.ChatAsync` contract.
 
 ## Verified Phase 02 Evidence
 
@@ -53,10 +61,8 @@ state before making claims about source, commits, dependencies, or verification.
 - `qwen3:1.7b` and local Ollama remain in place under the $0/R0-first policy.
 - Manual approval remains mandatory. No autonomous, paper, or live trading;
   no automatic strategy, skill, or risk modification.
-- SQLite versus JSON persistence and Semantic Kernel versus existing C#
-  orchestration are unresolved pending Claude review and owner approval.
-- Embeddings/vector databases, Blazor PWA, and TradingView Lightweight Charts
-  are not approved or assumed.
+- Owner-approved Phase 03 decisions are: JSON persistence via `System.Text.Json`, existing C# orchestration, and a split P03.4a/P03.4b scope.
+- Embeddings/vector databases, Blazor PWA, TradingView Lightweight Charts, SQLite, and Semantic Kernel remain unapproved for this phase unless a separate owner decision approves them.
 - Hermes is deferred; earlier Hermes ownership decisions are superseded.
 
 ## Documentation and Governance State
@@ -66,27 +72,24 @@ state before making claims about source, commits, dependencies, or verification.
   locked in `package-lock.json`.
 - `STATUS.md`, `Phases/PHASE-02.md`, and `CHANGELOG.md` record Phase 02
   verification and user acceptance.
-- `TRADING-AGENT-PROJECT-SOURCE-DETAILS.md` is the detailed historical
-  handover. It is historical context only; this file and `AI-WORKFLOW.md`
+- `TRADING-AGENT-PROJECT-SOURCE-DETAILS.md` is historical context only; this file and `AI-WORKFLOW.md`
   govern the current cross-AI task.
-- Phase 03 scope is in `Phases/PHASE-03.md`; the Claude review handoff is
-  `Prompts/Phase03-Claude-Technical-Architecture-Review.prompt.md`; the
-  Copilot draft is `.github/Prompts/Phase03-Copilot-Implementation-DRAFT.prompt.md`.
+- Phase 03 scope is in `Phases/PHASE-03.md`; the Phase 03 review record is
+  `CodingSkillAgent/Reviews/PHASE-03-CLAUDE-TECHNICAL-ARCHITECTURE-REVIEW.md`.
+- The authoritative Owner Decision Record is captured in this handoff, the Phase 03 review record, and the reconciled project documentation.
 
 ## Active Task
 
-**Owner:** Claude Desktop (review), followed by ChatGPT and the user.
+**Owner:** ChatGPT, with project-owner approval and subsequent implementation prompts only when explicitly authorised.
 
-**Task:** Conduct the Phase 03 read-only technical architecture review named in
-`CodingSkillAgent/Prompts/Phase03-Claude-Technical-Architecture-Review.prompt.md`.
+**Task:** Reconcile the Phase 03 documentation and owner decision record, ensuring the project record reflects approved JSON persistence, retained C# orchestration, the P03.4a/P03.4b split, and the approved orchestrator skill update.
 
-**Authorised work:** Repository inspection and documentation review only. No
+**Authorised work:** Documentation review and reconciliation only. No
 code, test, package, configuration, dependency, persistence, runtime, model,
 or architecture implementation change is authorised.
 
 **Recorded user decision:** Phase 02 was formally accepted on 24 October 2026;
-Phase 03 documentation preparation is authorised, while implementation awaits
-Claude review and owner decisions.
+Phase 03 is active, the Claude review is complete, and the owner has approved JSON persistence, existing C# orchestration, and the controlled P03.4 split for future implementation planning only.
 
 ## Role-Specific Instructions
 

@@ -1,13 +1,13 @@
 # Phase 03 — Adaptive Trading Assistant Foundation
 
 Status:
-DOCUMENTATION PREPARED — AWAITING CLAUDE TECHNICAL REVIEW
+OWNER DECISIONS RECORDED — IMPLEMENTATION NOT AUTHORISED
 
 ## Objective
 
 Establish the smallest safe foundation for the long-term Adaptive Trading
 Assistant: controlled C# orchestration, bounded local-Ollama interaction,
-candidate persistence, versioned trading knowledge, and evidence records.
+approved JSON persistence, versioned trading knowledge, and evidence records.
 This phase does not implement a trading strategy, trading automation, or full
 learning intelligence.
 
@@ -19,6 +19,10 @@ learning intelligence.
   persistence, strategy knowledge, or evidence engine exists yet.
 - `TradingAgent.Web` is an `InteractiveServer` UI whose server-side client
   calls the API.
+- Claude's Phase 03 technical architecture review was completed on 12 November
+  2026 and the owner selected JSON persistence via BCL `System.Text.Json`.
+- The owner also selected existing C# orchestration and approved the P03.4
+  split into contracts-first (`P03.4a`) and JSON implementation (`P03.4b`).
 
 ## Product Direction
 
@@ -28,7 +32,9 @@ Engine + AI Reasoning = Adaptive Trading Assistant.
 The product accumulates approved knowledge and evidence; it does not depend on
 continuous model retraining. C# is authoritative for orchestration, memory,
 skills, tools, learning records, statistics, risk enforcement, validation, and
-human approval gates. Ollama supplies bounded local inference only.
+human approval gates. Ollama supplies bounded local inference only. The owner
+has selected BCL-only JSON persistence for the approved Phase 03 scope and
+retained the existing C# orchestration model. Semantic Kernel remains deferred.
 
 ## Non-Negotiable Constraints
 
@@ -93,21 +99,29 @@ permission denial, and audit records for attempted execution.
 
 ### P03.4 — Persistent Memory
 
-**Purpose:** design and, only after technology approval, implement minimal
-durable records for observations, conversations, trade outcomes, learning
-proposals, provenance, and evidence references.
+**Purpose:** design and, only after explicit implementation approval, implement
+minimal durable records for observations, conversations, trade outcomes,
+learning proposals, provenance, and evidence references.
 
-**Dependencies:** Claude comparison of JSON versus SQLite and owner selection;
-P03.2 identity/correlation design.
+**Dependencies:** owner-selected JSON persistence using BCL `System.Text.Json`,
+P03.2 identity/correlation design, and the approved `P03.4a`/`P03.4b` split.
 
 **Acceptance criteria:** records distinguish observation, hypothesis, verified
 outcome, and approved knowledge; provenance and immutable references are
 preserved; retention, migration, failure, and backup approach are documented;
-no persistence option is selected before owner approval.
+JSON persistence is selected by explicit owner decision and remains within the
+approved Phase 03 scope.
 
 **Testing/evidence:** repository-specific persistence contract tests after
 approval; round-trip, corruption/failure, provenance, and concurrency tests
 appropriate to the selected implementation.
+
+**Approved sub-scope:**
+- **P03.4a — Contracts first**: domain records, application interfaces, and
+  validation boundaries; no concrete JSON persistence implementation.
+- **P03.4b — JSON implementation**: concrete storage built on `System.Text.Json`
+  and the approved contracts; must remain unauthorised until a separate
+  Copilot prompt is explicitly approved.
 
 ### P03.5 — Versioned Trading Knowledge and Conversational Teaching Foundation
 
@@ -148,9 +162,11 @@ evidence retention, deterministic-statistics boundary, and no-auto-promotion.
 1. Claude conducts the read-only architecture review and identifies technology
    change requests and unresolved decisions.
 2. Owner reviews Claude's verdict and explicitly selects or defers persistence
-   and any orchestration technology.
+   and any orchestration technology. This phase records the approved JSON and
+   C# orchestration decisions.
 3. Authorised implementation planning begins with P03.1, then P03.2/P03.3.
-4. P03.4 follows only the approved persistence decision.
+4. P03.4 follows only the approved persistence decision and the P03.4a/P03.4b
+   split.
 5. P03.5 and P03.6 follow the approved record model; they remain foundations,
    not automatic learning or trading features.
 
@@ -160,5 +176,9 @@ evidence retention, deterministic-statistics boundary, and no-auto-promotion.
 - Automatic strategy/skill/risk modification or model retraining.
 - Advanced statistics, full trade intelligence, pattern discovery, live signal
   monitoring, and market-data integration.
-- Embeddings, vector databases, Semantic Kernel, SQLite, JSON persistence,
-  Blazor PWA, and TradingView Lightweight Charts unless separately approved.
+- SQLite, Semantic Kernel, embeddings, vector databases, Blazor PWA, and
+  TradingView Lightweight Charts remain unapproved or deferred unless a
+  separate owner decision approves them.
+- JSON persistence is an approved Phase 03 design choice for the current scope
+  and therefore is not a technology addition requiring a separate TCR in this
+  project state.
