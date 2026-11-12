@@ -136,12 +136,21 @@ approved stack.
 
 ## Deferred Phase 03 Technology Decisions
 
-SQLite versus JSON persistence must be compared and explicitly selected by the
-owner before implementation. Semantic Kernel must be compared against the
-existing C# orchestration before any adoption decision. Embeddings, vector
-databases, Blazor PWA, and TradingView Lightweight Charts are not approved.
-Discussion, documentation, or a Claude recommendation does not approve any of
-these technologies.
+The owner selected BCL-only JSON persistence on 12 November 2026 for the
+approved Phase 03 scope. This selection is an explicit owner decision and does
+not require a separate technology change request because it uses existing
+`System.Text.Json` from the .NET runtime and introduces no new package, provider,
+framework, or service.
+
+This exception applies only to the approved JSON persistence design within the
+current Phase 03 scope. It does not approve SQLite, EF Core, external databases,
+cloud storage, other persistence frameworks, or any broader persistence
+replacement.
+
+Semantic Kernel must be compared against the existing C# orchestration before
+any adoption decision. Embeddings, vector databases, Blazor PWA, and
+TradingView Lightweight Charts are not approved. Discussion, documentation, or
+a Claude recommendation does not approve any of these technologies.
 
 ---
 
