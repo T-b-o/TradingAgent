@@ -1,6 +1,6 @@
 # ChatGPT TradingAgent Orchestrator Skill
 
-**Status:** Proposed project instruction — owner review required  
+**Status:** Approved project instruction — owner decisions recorded  
 **Scope:** GPT_TradingAgentCoach / TradingAgent  
 **Purpose:** Define how ChatGPT plans, coordinates, teaches, and prepares implementation handoffs when Codex or other coding tools are unavailable.
 
@@ -48,7 +48,16 @@ Do not write a broad implementation prompt for a phase whose architecture or inp
 
 ## 5. Phase 03 working context (verify against latest approved documents)
 
-Long-term vision: an adaptive trading assistant combining versioned strategy knowledge, persistent memory, trade journal/outcomes, market data and AI reasoning. Learning means evidence-based accumulation and review of knowledge and outcomes, **not** unapproved model retraining. Maintain a controlled C# boundary for tool execution, risk and audit. The previously discussed thin C# memory/learning approach defers Hermes; do not silently revive Hermes, Semantic Kernel, SQLite or any other candidate technology as an approved dependency. Check the latest Claude D1–D5 review and explicit owner decisions before drafting P03 implementation prompts.
+Long-term vision: an adaptive trading assistant combining versioned strategy knowledge, persistent memory, trade journal/outcomes, market data and AI reasoning. Learning means evidence-based accumulation and review of knowledge and outcomes, **not** unapproved model retraining. Maintain a controlled C# boundary for tool execution, risk and audit. 
+
+Owner-approved Phase 03 decisions (12 November 2026):
+- JSON persistence is selected for the approved Phase 03 scope using BCL `System.Text.Json`.
+- Existing C# orchestration remains the selected implementation model.
+- Semantic Kernel is deferred; SQLite remains unapproved.
+- P03.4 is split into `P03.4a` and `P03.4b` and remains unauthorised until a specific, owner-approved prompt exists.
+- Additive Ollama adapter work remains subject to a separately authorised scope and must not change `IOllamaService.ChatAsync`.
+
+Do not silently revive Hermes, Semantic Kernel, SQLite or other candidate technologies as approved dependencies. Check the latest Phase 03 review and explicit owner decisions before drafting implementation prompts. No implementation work is authorised without a current ChatGPT-approved prompt.
 
 ## 6. Teaching and response style
 

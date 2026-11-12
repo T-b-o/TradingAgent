@@ -54,7 +54,7 @@ Must be derived from Git.
 ## Phase 03
 
 Status:
-DOCUMENTATION PREPARED — AWAITING CLAUDE TECHNICAL REVIEW
+OWNER DECISIONS RECORDED — IMPLEMENTATION UNAUTHORISED
 
 Recorded direction:
 Adaptive Trading Assistant foundation: C# owns orchestration, memory, tools,
@@ -63,10 +63,19 @@ with `qwen3:1.7b` remains the inference runtime. No autonomous trading,
 automatic strategy/skill modification, model retraining, or unapproved
 technology is permitted.
 
-Deferred decisions:
-SQLite versus JSON persistence; Semantic Kernel versus existing C# orchestration;
-embeddings/vector databases; Blazor PWA; and TradingView Lightweight Charts.
-Claude review and explicit owner approval are required before implementation.
+Owner decisions (12 November 2026):
+- JSON persistence selected using BCL `System.Text.Json` for the approved Phase 03 scope.
+- Existing C# orchestration selected; Semantic Kernel remains deferred.
+- P03.4 is split into `P03.4a` and `P03.4b` and remains unimplemented.
+- The additive Ollama adapter extension is approved only within separately scoped
+  implementation work.
+- The ChatGPT TradingAgent Orchestrator skill was approved for update to reflect
+  the current review gate and decisions.
+
+Deferred or unapproved technologies:
+SQLite, Semantic Kernel, embeddings, vector databases, Blazor PWA, and
+TradingView Lightweight Charts remain outside the current approved implementation
+scope unless separately approved by the owner.
 
 Historical note:
 Earlier ownership references that gave Hermes a Phase 03 role are superseded.

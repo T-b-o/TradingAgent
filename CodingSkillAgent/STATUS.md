@@ -2,12 +2,13 @@
 
 ## Current Phase
 
-PHASE 03 — Documentation prepared; awaiting Claude technical review.
+PHASE 03 — OWNER DECISIONS RECORDED; IMPLEMENTATION NOT AUTHORISED.
 
 Phase 02 remains accepted (24 October 2026). The repository reflects the
 approved `InteractiveServer` architecture: the Web app calls the API through
-the server-side `TradingAgentApiClient`. Phase 03 has documentation only; no
-Phase 03 code, dependency, or configuration change is authorised.
+the server-side `TradingAgentApiClient`. Phase 03 is active, but the project
+remains in a documentation and decision-recording state. No Phase 03 code,
+dependency, or configuration change is authorised.
 
 ---
 
@@ -52,6 +53,17 @@ CONFIRMED — the active UI path uses `InteractiveServer` and the browser does n
 
 ---
 
+## Phase 03 Decisions
+
+- JSON persistence selected for the approved Phase 03 scope using BCL `System.Text.Json`.
+- Existing C# orchestration selected; Semantic Kernel remains deferred.
+- P03.4a/P03.4b approved as an architectural split.
+- Additive Ollama adapter work remains subject to separate implementation approval.
+- The orchestrator skill has been updated to reflect the approved decisions and review gate.
+- No implementation is authorised until a scoped Copilot prompt is explicitly approved.
+
+---
+
 ## Not Yet Implemented
 
 - user's trading strategy
@@ -63,6 +75,7 @@ CONFIRMED — the active UI path uses `InteractiveServer` and the browser does n
 - live trading
 - agent runtime/tool registry foundation
 - persistent memory, versioned trading knowledge, and evidence engine
+- JSON persistence implementation, P03.4 contracts, and P03.4b store code
 
 ---
 
@@ -86,6 +99,7 @@ ChatGPT:
 - architecture review
 - debugging coaching
 - knowledge checks
+- documentation reconciliation and decision recording
 
 Ollama:
 - actual local AI runtime
@@ -121,6 +135,4 @@ without explicit user approval.
 
 ## Next Gate
 
-Claude must perform the read-only review named in `CURRENT-HANDOFF.md`. The
-owner must then decide unresolved architecture and technology questions before
-any ChatGPT-approved Copilot implementation prompt can be created.
+The project documents are being reconciled against the Phase 03 owner decisions. The next implementation gate remains a narrowly scoped, ChatGPT-approved task that follows the approved JSON persistence, C# orchestration, and P03.4 split decisions.
